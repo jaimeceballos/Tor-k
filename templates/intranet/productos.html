@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block cuerpo %}
+	<h1> Alta y baja de Productos </h1>
+	<hr>
+	<form method="POST" action="{% url 'productos' %}">
+		
+		<ul class="nav navbar">
+			{% csrf_token %}
+			{{producto.as_ul}}
+			<li>
+				<input type="submit" class="btn btn-small btn-success" value="Grabar"/>
+			</li>
+		</ul>
+	</form>
+	<h3>Listado de productos</h3>
+	<table class="table table-bordered">
+  		<th>
+  			<td>
+  				Descripcion	
+  			</td>
+  			<td>
+  			</td>
+  		</th>
+  		{% for prod in productos %}
+		<tr>
+			<td>{{prod.id}}</td>
+			<td>{{prod.descripcion}}</td>
+			<td><a href=""><i class="icon-edit"></i></a><a href=""><i class="icon-trash"></i></a></td>
+		</tr>
+		{% endfor %}	
+	</table>
+
+
+	
+{% endblock %}

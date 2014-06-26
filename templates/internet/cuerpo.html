@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block cuerpo %}
+	
+	<ul class="thumbnails">
+		{% for oferta in ofertas %}	
+			<li class="span3">
+				<div class="thumbnail">
+					<img src="{{oferta.producto.imagen}}" alt="">
+					<div class="caption">
+						<h4>{{oferta.producto}}</h4>
+						<p>{{oferta.descripcion}}</p>
+						<p><a class="btn" href="#"> <img src="{{STATIC_ROOT}}img/carrito.png" width="15px"> Comprar &raquo;</a></p>
+					</div>
+				</div>
+			</li>
+		{% endfor %}
+	</ul>
+
+	{% if ofertas %}		
+		<div class="class pager">
+			<ul>
+				<li class="active"><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">4</a></li>
+				<li><a href="#">5</a></li>
+				<li><a href="#">6</a></li>
+				<li><a href="#">Ultimo</a></li>
+			</ul>
+		</div>
+
+	{% endif %}
+
+	
+
+{% endblock %}

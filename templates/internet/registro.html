@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block cuerpo %}
+	<form method="POST" action="{% url 'registro' %}">
+		
+		<ul class="nav navbar">
+			{% csrf_token %}
+			{{profile.as_ul}}
+			<li>
+				<input type="submit" class="btn btn-small btn-success" value="Registrar"/>
+			</li>
+		</ul>
+	</form>
+{% endblock %}
