@@ -1,7 +1,12 @@
 
 <label class="nav-header">Ingresar</label>
 <form method="post" action="{% url 'login' %}">
-
+     {% if form.errors %}
+        <div class="alert">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>Usuario o contraseña invalido.</strong> 
+      </div>
+     {% endif %} 
     <div class="control-group">
       <div class="controls">
         <div class="input-prepend">

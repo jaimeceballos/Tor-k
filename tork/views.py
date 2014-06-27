@@ -40,13 +40,15 @@ def login(request):
 			if user is not None and user.is_active:
 				# Password valido, el usuario esta marcado como activo
 				auth.login(request, user)
+				print user.is_authenticated()
 				return HttpResponseRedirect(reverse('inicio'))
 	categorias = Categoria.objects.all()
 	ofertas = Oferta.objects.filter()
-
+	of1 = ofertas.exclude(fecha_inicio__gte=datetime.now())
+	ofertas = ofertas.exclude(fecha_fin__lte=datetime.now())
 	
 	values={
-		
+		'ofertas':ofertas,
 		'form':form,
 		'categorias':categorias,
 	}
