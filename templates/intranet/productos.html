@@ -3,7 +3,7 @@
 {% block cuerpo %}
 	<h1> Alta y baja de Productos </h1>
 	<hr>
-	<form method="POST" action="{% url 'productos' %}">
+	<form method="POST" action="{% url 'productos' %}" enctype="multipart/form-data">
 		
 		<ul class="nav navbar">
 			{% csrf_token %}
@@ -26,7 +26,7 @@
 		<tr>
 			<td>{{prod.id}}</td>
 			<td>{{prod.descripcion}}</td>
-			<td><a href=""><i class="icon-edit"></i></a><a href=""><i class="icon-trash"></i></a></td>
+			<td><a href="{% url 'edit_productos' prod.id %}"><i class="icon-edit"></i></a><a href="{% url 'borrar_producto' prod.id %}"><i class="icon-trash"></i></a></td>
 		</tr>
 		{% endfor %}	
 	</table>

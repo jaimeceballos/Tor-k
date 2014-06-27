@@ -8,10 +8,11 @@ from views import *
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', pagina_inicio),
+    url(r'^$', pagina_inicio,name='inicio'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^main/', include('apps.main.urls')),
     url(r'^registro/$', registro, name='registro'),
     url(r'^logout/$', logout, name='logout'),
+    url(r'^login/$', login, name='login'),
 	
 )

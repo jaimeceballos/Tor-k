@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block cuerpo %}
+	<h1> Alta y baja de Productos </h1>
+	<hr>
+	<div class="row">
+		<div class="span6">
+			<form method="POST" action="{% url 'edit_productos' prod.id %}" enctype="multipart/form-data">
+				
+				<ul class="nav navbar">
+					{% csrf_token %}
+					{{producto.as_ul}}
+					<li>
+						<input type="submit" class="btn btn-small btn-success" value="Grabar"/>
+					</li>
+				</ul>
+			</form>
+			
+		</div>
+		<div class="span6">
+			<img src="{{STATIC_URL}}{{prod.imagen}}"/>
+		</div>
+	</div>
+	<h3>Listado de productos</h3>
+			<table class="table table-bordered">
+		  		<th>
+		  			<td>
+		  				Descripcion	
+		  			</td>
+		  			<td>
+		  			</td>
+		  		</th>
+		  		{% for prod in productos %}
+				<tr>
+					<td>{{prod.id}}</td>
+					<td>{{prod.descripcion}}</td>
+					<td><a href="{% url 'edit_productos' prod.id %}"><i class="icon-edit"></i></a><a href="{% url 'borrar_producto' prod.id %}"><i class="icon-trash"></i></a></td>
+				</tr>
+				{% endfor %}	
+			</table>
+{% endblock %}

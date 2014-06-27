@@ -1,6 +1,6 @@
 
 <label class="nav-header">Ingresar</label>
-<form method="post" action=".">
+<form method="post" action="{% url 'login' %}">
 
     <div class="control-group">
       <div class="controls">
@@ -13,7 +13,7 @@
     <div class="control-group">
       <div class="controls">
         <div class="input-prepend">
-          <span class="add-on"><i class="icon-arrow-right"></i></span>
+          <span class="add-on"><i class="icon-lock"></i></span>
           <input placeholder="Contraseña" class="span9" {{form.password}}/>
         </div>
       </div>

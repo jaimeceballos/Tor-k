@@ -6,6 +6,8 @@ urlpatterns = patterns('',
     url(r'^categoria/(?P<id_cat>\d+)/$', edit_categorias, name='edit_categorias'),
     url(r'^categorias/(?P<id_cat>\d+)/$', borrar_categoria, name='borrar_categoria'),
     url(r'^productos/$', productos, name='productos'),
+    url(r'^productos/(?P<id_prod>\d+)/$', edit_productos, name='edit_productos'),
+    url(r'^producto/(?P<id_prod>\d+)/$', borrar_producto, name='borrar_producto'),
 
     
 	

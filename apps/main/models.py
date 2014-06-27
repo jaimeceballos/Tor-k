@@ -57,7 +57,6 @@ class Categoria(models.Model):
 		return u"%s" % self.descripcion
 
 	def puedo_eliminar():
-		"""este metodo se encarga de verificar si se puede eliminar el tuit"""
 
 		return User.objects.get(username=request.user).is_staff()
 
@@ -73,6 +72,10 @@ class Producto(models.Model):
 	stock_actual	= models.IntegerField()
 	imagen			= models.ImageField(upload_to='productos/', null=True, blank=True)
 	costo			= models.DecimalField(max_digits=7, decimal_places=2)
+
+	def puedo_eliminar():
+
+		return User.objects.get(username=request.user).is_staff()
 
 	class Meta:
 		db_table	= 'producto'

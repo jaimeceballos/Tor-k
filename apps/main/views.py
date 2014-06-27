@@ -54,23 +54,24 @@ def borrar_categoria(request, id_cat):
 
 @login_required
 def edit_categorias(request,id_cat):
-	categoria = CategoriaForm(instance=Categoria.objects.get(id=id_cat))
+	cat = Categoria.objects.get(id=id_cat)
+	categoria = CategoriaForm(instance=cat)
 	categorias = Categoria.objects.all()
 	
 	if request.method == 'POST':
 		categoria = CategoriaForm(request.POST)
 		if categoria.is_valid():
-			cat = Categoria.objects.get(id=id_cat)
 			cat.descripcion = categoria.cleaned_data['descripcion']
 			cat.save()
 			categoria=CategoriaForm()
 			return HttpResponseRedirect(reverse('categorias'))
 	values={
+		'cat':cat,
 		'categoria':categoria,
 		'categorias':categorias,
 	}
 
-	return render_to_response('intranet/categorias.html',values, context_instance = RequestContext(request))
+	return render_to_response('intranet/edit_categorias.html',values, context_instance = RequestContext(request))
 
 @login_required
 def productos(request):
@@ -88,3 +89,49 @@ def productos(request):
 	}
 
 	return render_to_response('intranet/productos.html',values, context_instance = RequestContext(request))
+@login_required
+def edit_productos(request,id_prod):
+	prod = Producto.objects.get(id=id_prod)
+	producto = ProductoForm()
+	productos = Producto.objects.all()
+	if request.method == 'POST':
+		producto = ProductoForm(request.POST,request.FILES)
+		if producto.is_valid():
+			prod.categoria 		= producto.cleaned_data['categoria']
+			prod.descripcion 	= producto.cleaned_data['descripcion']
+			prod.stock_minimo 	= producto.cleaned_data['stock_minimo']
+			prod.punto_reorden 	= producto.cleaned_data['punto_reorden']
+			prod.stock_maximo 	= producto.cleaned_data['stock_maximo']
+			prod.stock_actual 	= producto.cleaned_data['stock_actual']
+			prod.costo 			= producto.cleaned_data['costo']
+			if producto.cleaned_data['imagen']:
+				prod.imagen 	= producto.cleaned_data['imagen']
+			prod.save()
+			producto = ProductoForm()
+			return HttpResponseRedirect(reverse('productos'))
+	producto = ProductoForm(instance=prod)
+	values={
+		'prod':prod,
+		'producto':producto,
+		'productos':productos,
+	}
+
+	return render_to_response('intranet/edit_productos.html',values, context_instance = RequestContext(request))
+
+@login_required
+def borrar_producto(request, id_prod):
+
+	producto = get_object_or_404(Producto, id = id_prod) 
+	
+	print producto
+	if producto.puedo_eliminar:
+		producto.delete()
+		return HttpResponseRedirect(reverse('productos'))
+
+ 	producto = ProductoForm()
+	productos = Producto.objects.all()
+	values={
+		'producto':producto,
+		'productos':productos,
+	}
+ 	return render_to_response('intranet/productos.html',values, context_instance = RequestContext(request))
