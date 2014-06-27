@@ -1,5 +1,8 @@
 {% extends "base.html" %}
-
+{% block breadcrumb %}
+	<li><a href="{% url 'productos' %}">Productos</a> <span class="divider">/</span></li>
+	<li><a href="{% url 'edit_productos' prod.id %}">{{prod}}</a> <span class="divider">/</span></li>
+{% endblock %}
 {% block cuerpo %}
 	<h1> Alta y baja de Productos </h1>
 	<hr>

@@ -1,5 +1,8 @@
 {% extends "base.html" %}
-
+{% block breadcrumb %}
+	<li><a href="{% url 'categorias' %}">Categorias</a> <span class="divider">/</span></li>
+	<li><a href="{% url 'edit_categorias' cat.id %}">{{cat}}</a> <span class="divider">/</span></li>
+{% endblock %}
 {% block cuerpo %}
 	<h1> Alta y baja de Categorias </h1>
 	<hr>

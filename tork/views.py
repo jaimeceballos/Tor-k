@@ -10,6 +10,7 @@ from apps.main.forms import LoginForm, UserProfileForm,RegistracionForm
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from datetime import datetime
 
 from django.views.decorators.cache import cache_control
 
@@ -19,10 +20,11 @@ def pagina_inicio(request):
 	categorias = Categoria.objects.all()
 	form = LoginForm()
 	ofertas = Oferta.objects.filter()
-
+	of1 = ofertas.exclude(fecha_inicio__gte=datetime.now())
+	ofertas = ofertas.exclude(fecha_fin__lte=datetime.now())
 	
 	values={
-		
+		'ofertas':ofertas,
 		'form':form,
 		'categorias':categorias,
 	}
