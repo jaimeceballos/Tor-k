@@ -82,5 +82,6 @@ class ProductoForm(forms.ModelForm):
 
 class OfertaForm(forms.ModelForm):
     categoria = forms.ModelChoiceField(widget=forms.Select(), queryset= Categoria.objects.all(),label=(u'Categoria'))
+    fecha_inicio = forms.DateField(widget=forms.DateInput())
     class Meta:
         model = Oferta

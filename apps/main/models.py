@@ -133,6 +133,10 @@ class Oferta(models.Model):
 	fecha_fin		= models.DateField()
 	costo			= models.DecimalField(max_digits=7,decimal_places=2)
 
+	def puedo_eliminar():
+
+		return User.objects.get(username=request.user).is_staff()
+
 	class Meta:
 		db_table = 'Oferta'
 

@@ -128,7 +128,6 @@ def borrar_producto(request, id_prod):
 
 	producto = get_object_or_404(Producto, id = id_prod) 
 	
-	print producto
 	if producto.puedo_eliminar:
 		producto.delete()
 		return HttpResponseRedirect(reverse('productos'))
@@ -157,6 +156,52 @@ def ofertas(request):
  		'ofertas':ofertas,
  	}
  	return render_to_response('intranet/ofertas.html',values, context_instance = RequestContext(request))
+
+@login_required
+def borrar_oferta(request,id_oferta):
+
+	oferta = get_object_or_404(Oferta, id = id_oferta)
+
+	if oferta.puedo_eliminar:
+		oferta.delete()
+		return HttpResponseRedirect(reverse('ofertas'))
+	categorias = Categoria.objects.all()
+	oferta     = OfertaForm()
+	ofertas	   = Oferta.objects.all()
+	values={
+ 		'categorias':categorias,
+ 		'oferta':oferta,
+ 		'ofertas':ofertas,
+ 	}
+ 	return render_to_response('intranet/ofertas.html',values, context_instance = RequestContext(request))
+
+@login_required
+def edit_ofertas(request,id_oferta):
+	print 'entra'
+	of 		   = Oferta.objects.get(id=id_oferta)
+	categorias = Categoria.objects.all()
+	oferta     = OfertaForm(instance=of)
+	oferta.fields['categoria'].initial = of.producto.categoria
+	ofertas	   = Oferta.objects.all()	
+	if request.method == 'POST':
+		oferta = OfertaForm(request.POST)
+		if oferta.is_valid():
+			of.producto = oferta.cleaned_data['producto']
+			of.fecha_inicio = oferta.cleaned_data['fecha_inicio']
+			of.fecha_fin	= oferta.cleaned_data['fecha_fin']
+			of.costo = oferta.cleaned_data['costo']
+			of.save()
+			oferta=OfertaForm()
+			return HttpResponseRedirect(reverse('ofertas'))
+ 	values={
+ 		'categorias':categorias,
+ 		'oferta':oferta,
+ 		'ofertas':ofertas,
+ 		'of':of,
+ 	}
+ 	return render_to_response('intranet/edit_ofertas.html',values, context_instance = RequestContext(request))
+
+
 
 @login_required
 def obtener_productos(request,id_cat):

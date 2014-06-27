@@ -3,31 +3,37 @@
 {% block cuerpo %}
 	<h1> Alta y baja de Ofertas </h1>
 	<hr>
-	<form method="POST" action="{% url 'ofertas' %}">{% csrf_token %}
-		<p><label for="id_categoria">Categoria:</label> 
-			<select id="id_categoria" name="categoria">
-				<option value={{oferta.categoria}}</option>
-			</select>
-		</p>
-		<p><label for="id_producto">Producto:</label> 
-			<select id="id_producto" name="producto">
-					<option value="0"></option>
-			</select>
-		</p>
-		<p><label for="id_fecha_inicio">Fecha inicio:</label> 
-			<input id="id_fecha_inicio" name="fecha_inicio" type="date" />
-		</p>
-		<p><label for="id_fecha_fin">Fecha fin:</label> 
-			<input id="id_fecha_fin" name="fecha_fin" type="date" />
-		</p>
-		<p><label for="id_costo">Costo:</label> 
-			<input id="id_costo" name="costo" type="text" />
-		</p>
-		<p>
-			<input type="submit" class="btn btn-small btn-success" value="Grabar"/>	
-		</p>
-	</form>
-	
+	<div class="row">
+		<div class="span5 offset1">
+			<form method="POST" action="{% url 'edit_ofertas' of.id %}">{% csrf_token %}
+				<p><label for="id_categoria">Categoria:</label> 
+					<select id="id_categoria" name="categoria">
+						<option value={{oferta.categoria}}</option>
+					</select>
+				</p>
+				<p><label for="id_producto">Producto:</label> 
+					<select id="id_producto" name="producto">
+							<option {{oferta.producto}}</option>
+					</select>
+				</p>
+				<p><label for="id_fecha_inicio">Fecha inicio:</label> 
+					{{ oferta.fecha_inicio }} 
+				</p>
+				<p><label for="id_fecha_fin">Fecha fin:</label> 
+					{{ oferta.fecha_fin }}
+				</p>
+				<p><label for="id_costo">Costo:</label> 
+					{{oferta.costo}}
+				</p>
+				<p>
+					<input type="submit" class="btn btn-small btn-success" value="Grabar" />
+				</p>
+			</form>
+		</div>
+		<div class="span3">
+			<img src="{{STATIC_URL}}{{of.producto.imagen}}"/>
+		</div>
+	</div>
 	<h3>Listado de ofertas</h3>
 			<table class="table table-bordered">
 		  		<th>
