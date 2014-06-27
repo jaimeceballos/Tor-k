@@ -11,6 +11,7 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 import simplejson
+from django.core import serializers
 
 from django.views.decorators.cache import cache_control
 # Create your views here.
@@ -77,6 +78,7 @@ def edit_categorias(request,id_cat):
 def productos(request):
 	producto = ProductoForm()
 	productos = Producto.objects.all()
+	categorias = Categoria.objects.all()
 	if request.method == 'POST':
 		producto = ProductoForm(request.POST,request.FILES)
 		if producto.is_valid():
@@ -86,6 +88,7 @@ def productos(request):
 	values={
 		'producto':producto,
 		'productos':productos,
+		'categorias':categorias,
 	}
 
 	return render_to_response('intranet/productos.html',values, context_instance = RequestContext(request))
@@ -94,6 +97,7 @@ def edit_productos(request,id_prod):
 	prod = Producto.objects.get(id=id_prod)
 	producto = ProductoForm()
 	productos = Producto.objects.all()
+	categorias = Categoria.objects.all()
 	if request.method == 'POST':
 		producto = ProductoForm(request.POST,request.FILES)
 		if producto.is_valid():
@@ -114,6 +118,7 @@ def edit_productos(request,id_prod):
 		'prod':prod,
 		'producto':producto,
 		'productos':productos,
+		'categorias':categorias,
 	}
 
 	return render_to_response('intranet/edit_productos.html',values, context_instance = RequestContext(request))
@@ -135,3 +140,27 @@ def borrar_producto(request, id_prod):
 		'productos':productos,
 	}
  	return render_to_response('intranet/productos.html',values, context_instance = RequestContext(request))
+
+@login_required
+def ofertas(request):
+	categorias = Categoria.objects.all()
+	oferta     = OfertaForm()
+	ofertas	   = Oferta.objects.all()	
+	if request.method == 'POST':
+		oferta = OfertaForm(request.POST)
+		if oferta.is_valid():
+			oferta.save()
+			oferta=OfertaForm()
+ 	values={
+ 		'categorias':categorias,
+ 		'oferta':oferta,
+ 		'ofertas':ofertas,
+ 	}
+ 	return render_to_response('intranet/ofertas.html',values, context_instance = RequestContext(request))
+
+@login_required
+def obtener_productos(request,id_cat):
+	data = request.POST
+	productos = Producto.objects.filter(categoria = id_cat)
+	data = serializers.serialize("json", productos)
+	return HttpResponse(data, mimetype='application/json')

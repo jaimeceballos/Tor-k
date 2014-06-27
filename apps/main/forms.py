@@ -4,11 +4,14 @@
 from django import forms 
 from apps.main.models import *
 
-class LoginForm(forms.Form):
-	usuario = forms.CharField()
-	password = forms.CharField(widget=forms.PasswordInput())
 
 attrs_dict = { 'class': 'required' }
+
+class LoginForm(forms.Form):
+	usuario = forms.CharField(widget=forms.TextInput(attrs=dict(attrs_dict)))
+	password = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False))
+
+
 
 class RegistracionForm(forms.Form):
     
@@ -76,3 +79,8 @@ class ProductoForm(forms.ModelForm):
 
     class Meta:
         model=Producto
+
+class OfertaForm(forms.ModelForm):
+    categoria = forms.ModelChoiceField(widget=forms.Select(), queryset= Categoria.objects.all(),label=(u'Categoria'))
+    class Meta:
+        model = Oferta

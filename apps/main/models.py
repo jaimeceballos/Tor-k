@@ -77,6 +77,9 @@ class Producto(models.Model):
 
 		return User.objects.get(username=request.user).is_staff()
 
+	def __unicode__(self):
+		return u"%s" % self.descripcion
+
 	class Meta:
 		db_table	= 'producto'
 
@@ -128,7 +131,7 @@ class Oferta(models.Model):
 	producto 		= models.ForeignKey('Producto')
 	fecha_inicio	= models.DateField()
 	fecha_fin		= models.DateField()
-	costo			= models.DecimalField(max_digits=5,decimal_places=2)
+	costo			= models.DecimalField(max_digits=7,decimal_places=2)
 
 	class Meta:
 		db_table = 'Oferta'

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+	<h1> Alta y baja de Ofertas </h1>
+	<hr>
+	<form method="POST" action="{% url 'ofertas' %}">{% csrf_token %}
+		<p><label for="id_categoria">Categoria:</label> 
+			<select id="id_categoria" name="categoria">
+				<option value={{oferta.categoria}}</option>
+			</select>
+		</p>
+		<p><label for="id_producto">Producto:</label> 
+			<select id="id_producto" name="producto">
+					<option value="0"></option>
+			</select>
+		</p>
+		<p><label for="id_fecha_inicio">Fecha inicio:</label> 
+			<input id="id_fecha_inicio" name="fecha_inicio" type="date" />
+		</p>
+		<p><label for="id_fecha_fin">Fecha fin:</label> 
+			<input id="id_fecha_fin" name="fecha_fin" type="date" />
+		</p>
+		<p><label for="id_costo">Costo:</label> 
+			<input id="id_costo" name="costo" type="text" />
+		</p>
+		<p>
+			<input type="submit" class="btn btn-small btn-success" value="Grabar"/>	
+		</p>
+	</form>
+	
+	<h3>Listado de ofertas</h3>
+			<table class="table table-bordered">
+		  		<th>
+		  			<td>
+		  				Categoria
+		  			</td>
+		  			<td>
+		  				Descripcion	
+		  			</td>
+		  			<td>
+		  				Desde
+		  			</td>
+		  			<td>
+		  				Hasta
+		  			</td>
+		  			<td>
+		  			</td>
+		  			<td>
+		  			</td>
+		  		</th>
+		  		{% for oferta in ofertas %}
+				<tr>
+					<td>{{oferta.id}}</td>
+					<td>{{oferta.producto.categoria}}</td>
+					<td>{{oferta.producto.descripcion}}</td>
+					<td>{{oferta.fecha_inicio}}</td>
+					<td>{{oferta.fecha_fin}}</td>
+					<td><center><a href=""><i class="icon-edit"></i></a></center></td>
+					<td><center><a href=""><i class="icon-remove-sign"></i></a></center></td>
+				</tr>
+				{% endfor %}	
+			</table>
+
+{% endblock %}

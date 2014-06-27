@@ -39,6 +39,17 @@ def login(request):
 				# Password valido, el usuario esta marcado como activo
 				auth.login(request, user)
 				return HttpResponseRedirect(reverse('inicio'))
+	categorias = Categoria.objects.all()
+	ofertas = Oferta.objects.filter()
+
+	
+	values={
+		
+		'form':form,
+		'categorias':categorias,
+	}
+	return render_to_response('internet/cuerpo.html',values, context_instance = RequestContext(request))
+			
 
 @cache_control(must_revalidate=True, max_age=3600, private=True)
 def logout(request):

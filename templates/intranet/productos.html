@@ -14,22 +14,29 @@
 		</ul>
 	</form>
 	<h3>Listado de productos</h3>
-	<table class="table table-bordered">
-  		<th>
-  			<td>
-  				Descripcion	
-  			</td>
-  			<td>
-  			</td>
-  		</th>
-  		{% for prod in productos %}
-		<tr>
-			<td>{{prod.id}}</td>
-			<td>{{prod.descripcion}}</td>
-			<td><a href="{% url 'edit_productos' prod.id %}"><i class="icon-edit"></i></a><a href="{% url 'borrar_producto' prod.id %}"><i class="icon-trash"></i></a></td>
-		</tr>
-		{% endfor %}	
-	</table>
+			<table class="table table-bordered">
+		  		<th>
+		  			<td>
+		  				Categoria
+		  			</td>
+		  			<td>
+		  				Descripcion	
+		  			</td>
+		  			<td>
+		  			</td>
+		  			<td>
+		  			</td>
+		  		</th>
+		  		{% for prod in productos %}
+				<tr>
+					<td>{{prod.id}}</td>
+					<td>{{prod.categoria}}</td>
+					<td>{{prod.descripcion}}</td>
+					<td><center><a href="{% url 'edit_productos' prod.id %}"><i class="icon-edit"></i></a></center></td>
+					<td><center><a href="{% url 'borrar_producto' prod.id %}"><i class="icon-remove-sign"></i></a></center></td>
+				</tr>
+				{% endfor %}	
+			</table>
 
 
 	

@@ -8,6 +8,8 @@ urlpatterns = patterns('',
     url(r'^productos/$', productos, name='productos'),
     url(r'^productos/(?P<id_prod>\d+)/$', edit_productos, name='edit_productos'),
     url(r'^producto/(?P<id_prod>\d+)/$', borrar_producto, name='borrar_producto'),
+    url(r'^ofertas/$', ofertas, name='ofertas'),
+    url(r'^ofertas/prod/(?P<id_cat>\d+)/$', obtener_productos, name='obtener_productos'),
 
     
 	
