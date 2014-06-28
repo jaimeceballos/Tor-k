@@ -13,7 +13,7 @@ $(document).ready(function() {
                 options="" 
                for (var i = 0; i < data.length; i++){
                           
-                    options += '<option value="'+data[i]["pk"]+'">' +data[i]["fields"]["descripcion"] +'</option>'
+                    options += '<option value="'+data[i]["pk"]+'">' +data[i]["fields"]["nombre"] +'</option>'
                          
                 }
                 $('#id_producto').html(options)

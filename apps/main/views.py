@@ -209,3 +209,32 @@ def obtener_productos(request,id_cat):
 	productos = Producto.objects.filter(categoria = id_cat)
 	data = serializers.serialize("json", productos)
 	return HttpResponse(data, mimetype='application/json')
+
+def ver_producto(request,id_prod):
+	form = LoginForm()
+	categorias = Categoria.objects.all()
+	prod = Producto.objects.get(id=id_prod)
+	if request.method == 'POST':
+		if not request.user.is_authenticated():
+			
+			values={
+				'form':form,
+ 				'categorias':categorias,
+ 				'prod':prod,
+ 			}
+			return render_to_response('internet/must_login.html',values, context_instance = RequestContext(request))
+		else:
+			lista = request.session['carrito']
+			lista.append(id_prod)
+			request.session['carrito'] = lista
+			print request.session['carrito']
+
+	categorias = Categoria.objects.all()
+	prod = Producto.objects.get(id=id_prod)
+
+	values={
+		'form':form,
+ 		'categorias':categorias,
+ 		'prod':prod,
+ 	}
+ 	return render_to_response('internet/ver_producto.html',values, context_instance = RequestContext(request))

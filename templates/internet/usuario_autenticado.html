@@ -9,10 +9,7 @@
             <i class="icon-user"></i> 
             Modificar Perfil </a>  
       </li>  
-      <li> <a href="/logout/"> 
-            <i class="icon-off"></i> 
-            Cerrar sesi&oacute;n </a>  
-      </li>
+      
     
     {% if user.is_staff %}
     <li>
@@ -43,7 +40,19 @@
         <a href="">
           <i class="icon-tasks"></i>Envio de Pedidos</a>
     </li>
+    {% else %}
+    <li>
+        <a href="">
+          <i class="icon-shopping-cart"></i>Ir a mi carrito</a>
+    </li>
+    <li>
+        <a href="">
+          <i class="icon-eye-open"></i>ver mis pedidos</a>
+    </li>
     {% endif %}
-    
+    <li> <a href="/logout/"> 
+            <i class="icon-off"></i> 
+            Cerrar sesi&oacute;n </a>  
+      </li>
   </ul>
 

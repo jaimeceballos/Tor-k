@@ -3,17 +3,48 @@
 	
 {% endblock %}
 {% block cuerpo %}
-	
+	{{request.session.get.carrito}}
 	<ul class="thumbnails">
 		{% for oferta in ofertas %}	
 			<li class="span3">
 				<div class="thumbnail">
 					
 					<div class="caption">
-						<h4>{{oferta.producto}}</h4>
-						<img src="{{STATIC_URL}}{{oferta.producto.imagen}}" alt="">
-						<p>{{oferta.producto.descripcion}}</p>
-						<p>${{oferta.costo}} <a class="btn" href="#"> <i class="icon-shopping-cart"></i>Comprar</a></p>
+						<h4><a href="{% url 'ver_producto' oferta.producto.id %}">{{oferta.producto}}</a></h4>
+						<img src="{{STATIC_URL}}{{oferta.producto.imagen}}" alt="" class="img-rounded">
+						<p>{{oferta.producto}}</p>
+						<p>${{oferta.costo}} </p>
+						{% if oferta.producto.stock_actual > 0 %}
+							
+							<p>Cantidad: {{oferta.producto.stock_actual}} disponibles.
+							</p>
+						{% else %}
+							<strong>Producto sin stock</strong>
+						{% endif %}
+						
+						
+					</div>
+				</div>
+			</li>
+		{% endfor %}
+		{% for producto in productos %}	
+			<li class="span3">
+				<div class="thumbnail">
+					
+					<div class="caption">
+						<h4><a href="{% url 'ver_producto' producto.id %}">{{producto}}</a></h4>
+						<img src="{{STATIC_URL}}{{producto.imagen}}" class="img-rounded">
+						<p>{{producto}}</p>
+						<p>${{producto.costo}} </p>
+						{% if producto.stock_actual > 0 %}
+							
+							<p>Cantidad: {{producto.stock_actual}} disponibles.
+							</p>
+						{% else %}
+							<strong>Producto sin stock</strong>
+						{% endif %}
+						
+						
 					</div>
 				</div>
 			</li>

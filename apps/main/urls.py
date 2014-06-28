@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^ofertas/prod/(?P<id_cat>\d+)/$', obtener_productos, name='obtener_productos'),
     url(r'^ofertas/(?P<id_oferta>\d+)/$', edit_ofertas, name='edit_ofertas'),
     url(r'^oferta/(?P<id_oferta>\d+)/$', borrar_oferta, name='borrar_oferta'),
+    url(r'^producto/ver/(?P<id_prod>\d+)/$', ver_producto, name='ver_producto'),
 
     
 	

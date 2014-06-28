@@ -19,11 +19,9 @@ def pagina_inicio(request):
 	
 	categorias = Categoria.objects.all()
 	form = LoginForm()
-	ofertas = Oferta.objects.filter()
-	of1 = ofertas.exclude(fecha_inicio__gte=datetime.now())
-	ofertas = ofertas.exclude(fecha_fin__lte=datetime.now())
-	
+	productos , ofertas = productos_publicar()
 	values={
+		'productos':productos,
 		'ofertas':ofertas,
 		'form':form,
 		'categorias':categorias,
@@ -40,7 +38,7 @@ def login(request):
 			if user is not None and user.is_active:
 				# Password valido, el usuario esta marcado como activo
 				auth.login(request, user)
-				print user.is_authenticated()
+				request.session['carrito'] = []
 				return HttpResponseRedirect(reverse('inicio'))
 	categorias = Categoria.objects.all()
 	ofertas = Oferta.objects.filter()
@@ -84,3 +82,14 @@ def registro(request):
 		'categorias':categorias,
 	}
 	return render_to_response('internet/registro.html',values, context_instance = RequestContext(request))
+
+def productos_publicar():
+	ofertas = Oferta.objects.all()
+	of1 = ofertas.exclude(fecha_inicio__gte=datetime.now())
+	ofertas = ofertas.exclude(fecha_fin__lte=datetime.now())
+
+	producto = Producto.objects.all()
+	for of in ofertas:
+		p = of.producto.id
+		producto = producto.exclude(id=p)
+	return producto,ofertas

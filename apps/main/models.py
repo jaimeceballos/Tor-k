@@ -15,7 +15,7 @@ class TipoDoc(models.Model):
 
 class UserProfile(models.Model):
 	user 		= models.OneToOneField(User)
-	tipo_doc	= models.ForeignKey('TipoDoc',null=True,blank=True)
+	tipo_doc	= models.ForeignKey('TipoDoc',null=True,blank=True,on_delete=models.PROTECT)
 	nro_doc		= models.IntegerField(null=True,blank=True)
 	localidad	= models.CharField(max_length=100,null=True,blank=True)
 	calle		= models.CharField(max_length=100,null=True,blank=True)
@@ -39,7 +39,7 @@ class Provincia(models.Model):
 
 class Localidad(models.Model):
 	nombre		= models.CharField(max_length=50)
-	provincia 	= models.ForeignKey('Provincia')
+	provincia 	= models.ForeignKey('Provincia',on_delete=models.PROTECT)
 
 	class Meta:
 		db_table='localidad'	
@@ -64,8 +64,10 @@ class Categoria(models.Model):
 		db_table = 'categoria'
 
 class Producto(models.Model):
-	categoria 		= models.ForeignKey('Categoria')
-	descripcion		= models.CharField(max_length=100)
+	categoria 		= models.ForeignKey('Categoria',on_delete=models.PROTECT)
+	nombre			= models.CharField(max_length=100)
+	marca			= models.CharField(max_length=100)
+	espec			= models.TextField(max_length=250)
 	stock_minimo	= models.IntegerField()
 	punto_reorden	= models.IntegerField()
 	stock_maximo	= models.IntegerField()
@@ -78,7 +80,7 @@ class Producto(models.Model):
 		return User.objects.get(username=request.user).is_staff()
 
 	def __unicode__(self):
-		return u"%s" % self.descripcion
+		return u"%s - %s" % (self.nombre,self.marca)
 
 	class Meta:
 		db_table	= 'producto'
@@ -86,15 +88,15 @@ class Producto(models.Model):
 
 class Pedido(models.Model):
 	fecha_carga		= models.DateField(auto_now=True)
-	cliente 		= models.ForeignKey('UserProfile')
-	estado_pedido	= models.ForeignKey('EstadoPedido')
+	cliente 		= models.ForeignKey('UserProfile',on_delete=models.PROTECT)
+	estado_pedido	= models.ForeignKey('EstadoPedido',on_delete=models.PROTECT)
 
 	class Meta:
 		db_table	= 'pedido'
 
 class ProductoPedido(models.Model):
-	pedido 		= models.ForeignKey('Pedido')
-	producto 	= models.ForeignKey('Producto')
+	pedido 		= models.ForeignKey('Pedido',on_delete=models.PROTECT)
+	producto 	= models.ForeignKey('Producto',on_delete=models.PROTECT)
 	cantidad	= models.IntegerField()
 	anulado		= models.BooleanField(default=False)
 	costo		= models.DecimalField(max_digits=5, decimal_places=2)
@@ -111,24 +113,24 @@ class TipoFactura(models.Model):
 
 
 class Factura(models.Model):
-	tipo 	= models.ForeignKey('TipoFactura')
+	tipo 	= models.ForeignKey('TipoFactura',on_delete=models.PROTECT)
 	numero	= models.IntegerField()
-	pedido 	= models.ForeignKey('Pedido')
+	pedido 	= models.ForeignKey('Pedido',on_delete=models.PROTECT)
 	fecha 	= models.DateField()
 
 	class Meta:
 		db_table =	'factura'
 
 class DetalleFactura(models.Model):
-	factura 		= models.ForeignKey('Factura')
-	pedido_producto	= models.ForeignKey('ProductoPedido')
+	factura 		= models.ForeignKey('Factura',on_delete=models.PROTECT)
+	pedido_producto	= models.ForeignKey('ProductoPedido',on_delete=models.PROTECT)
 	costo			= models.DecimalField(max_digits=5,decimal_places=2)
 
 	class Meta:
 		db_table 	= 'detalle_factura'
 
 class Oferta(models.Model):
-	producto 		= models.ForeignKey('Producto')
+	producto 		= models.ForeignKey('Producto',on_delete=models.PROTECT)
 	fecha_inicio	= models.DateField()
 	fecha_fin		= models.DateField()
 	costo			= models.DecimalField(max_digits=7,decimal_places=2)
