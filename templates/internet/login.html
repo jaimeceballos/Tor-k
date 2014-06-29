@@ -1,27 +1,29 @@
 
 <label class="nav-header">Ingresar</label>
 <form method="post" action="{% url 'login' %}">
-     {% if form.errors %}
+     {% if form.non_field_errors  %}
         <div class="alert">
           <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <strong>Usuario o contraseña invalido.</strong> 
+          <strong>{{ form.non_field_errors }}</strong> 
       </div>
      {% endif %} 
     <div class="control-group">
       <div class="controls">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-user"></i></span>
-          <input placeholder="Usuario" class="span9" {{form.usuario}} />
+          {{form.usuario}}
         </div>
       </div>
+      {{ form.usuario.errors }}
     </div>
     <div class="control-group">
       <div class="controls">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-lock"></i></span>
-          <input placeholder="Contraseña" class="span9" {{form.password}}/>
+          {{form.password}}
         </div>
       </div>
+      {{ form.password.errors }}
     </div>
 				
 		<p>		<input type="submit" class="btn btn-success btn-small btn-block" value="Ingresar" />{% csrf_token %}</p>

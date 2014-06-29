@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 import simplejson
 from django.core import serializers
-
+from tork.views import productos_publicar
 from django.views.decorators.cache import cache_control
 # Create your views here.
 
@@ -26,7 +26,6 @@ def categorias(request):
 			categoria.save()
 			categoria=CategoriaForm()
 
-	print categoria
 	values={
 		'categoria':categoria,
 		'categorias':categorias,
@@ -177,7 +176,6 @@ def borrar_oferta(request,id_oferta):
 
 @login_required
 def edit_ofertas(request,id_oferta):
-	print 'entra'
 	of 		   = Oferta.objects.get(id=id_oferta)
 	categorias = Categoria.objects.all()
 	oferta     = OfertaForm(instance=of)
@@ -225,9 +223,9 @@ def ver_producto(request,id_prod):
 			return render_to_response('internet/must_login.html',values, context_instance = RequestContext(request))
 		else:
 			lista = request.session['carrito']
-			lista.append(id_prod)
+			lista.append(Producto.objects.get(id=id_prod))
 			request.session['carrito'] = lista
-			print request.session['carrito']
+			
 
 	categorias = Categoria.objects.all()
 	prod = Producto.objects.get(id=id_prod)
@@ -238,3 +236,31 @@ def ver_producto(request,id_prod):
  		'prod':prod,
  	}
  	return render_to_response('internet/ver_producto.html',values, context_instance = RequestContext(request))
+
+@login_required
+def ver_carrito(request):
+	carrito = request.session['carrito']
+	productos, ofertas = productos_publicar()
+	prods = []
+	for producto in carrito:
+
+		try:
+			if ofertas.get(producto=producto):
+				p = ofertas.get(producto=producto).producto
+				p.costo = ofertas.get(producto=producto).costo
+				prods.append(p)
+		except:
+			prods.append(producto)
+	categorias = Categoria.objects.all()
+	values={
+		'prods':prods,
+		'categorias':categorias,
+ 	}
+ 	return render_to_response('extranet/ver_carrito.html',values, context_instance = RequestContext(request))
+
+@login_required
+def remove_from_cart(request,id_prod):
+	carrito = request.session['carrito']
+	carrito.remove(Producto.objects.get(id=id_prod))
+	request.session['carrito'] = carrito
+	return HttpResponseRedirect(reverse('ver_carrito'))

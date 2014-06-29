@@ -13,6 +13,8 @@ urlpatterns = patterns('',
     url(r'^ofertas/(?P<id_oferta>\d+)/$', edit_ofertas, name='edit_ofertas'),
     url(r'^oferta/(?P<id_oferta>\d+)/$', borrar_oferta, name='borrar_oferta'),
     url(r'^producto/ver/(?P<id_prod>\d+)/$', ver_producto, name='ver_producto'),
+    url(r'^micarrito/$', ver_carrito, name='ver_carrito'),
+    url(r'^micarrito/remove/(?P<id_prod>\d+)/$', remove_from_cart, name='remove_from_cart'),
 
     
 	

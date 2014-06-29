@@ -68,9 +68,11 @@
 
 			{% endif %}	
           </div><!--/.well -->
+          {% if not user.is_staff %}
           <div class="well">
             {% include "internet/navbar_cuerpo.html" %}
           </div><!--/.well -->
+          {% endif %}
         </div><!--/span-->
 
         <div class="span9">

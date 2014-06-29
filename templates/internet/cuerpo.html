@@ -3,7 +3,7 @@
 	
 {% endblock %}
 {% block cuerpo %}
-	{{request.session.get.carrito}}
+	{% if not user.is_staff %}
 	<ul class="thumbnails">
 		{% for oferta in ofertas %}	
 			<li class="span3">
@@ -50,21 +50,10 @@
 			</li>
 		{% endfor %}
 	</ul>
-
-	{% if ofertas %}		
-		<div class="class pager">
-			<ul>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#">6</a></li>
-				<li><a href="#">Ultimo</a></li>
-			</ul>
-		</div>
+	{% else %}
 
 	{% endif %}
+	
 
 	
 

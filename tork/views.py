@@ -11,7 +11,7 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from datetime import datetime
-
+from django.forms.forms import NON_FIELD_ERRORS
 from django.views.decorators.cache import cache_control
 
 @cache_control(must_revalidate=True, max_age=3600, private=True)
@@ -38,14 +38,19 @@ def login(request):
 			if user is not None and user.is_active:
 				# Password valido, el usuario esta marcado como activo
 				auth.login(request, user)
+
 				request.session['carrito'] = []
 				return HttpResponseRedirect(reverse('inicio'))
+			elif user is None or not user.is_active:
+				form._errors[NON_FIELD_ERRORS] = form.error_class(["Verifique su usuario y/o password."])
 	categorias = Categoria.objects.all()
 	ofertas = Oferta.objects.filter()
 	of1 = ofertas.exclude(fecha_inicio__gte=datetime.now())
 	ofertas = ofertas.exclude(fecha_fin__lte=datetime.now())
-	
+	productos , ofertas = productos_publicar()
 	values={
+		'productos':productos,
+		'ofertas':ofertas,
 		'ofertas':ofertas,
 		'form':form,
 		'categorias':categorias,

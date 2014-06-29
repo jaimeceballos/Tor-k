@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block cuerpo %}
+	<div class="container">
+	<div class="row">
+		<div class="span8 offset1">
+			<h3 class="text-info text-right">
+				Productos en mi carrito
+			</h3>
+			<hr>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							Producto
+						</th>
+						<th>
+							Costo
+						</th>
+						<th>
+							Stock
+						</th>
+						<th>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for p in prods %}
+					<tr>
+						<td>
+							{{p}}
+						</td>
+						<td>
+							{{p.costo}}
+						</td>
+						<td>
+							{{p.stock_actual}}
+						</td>
+						<td>
+							<center><a href="{% url 'remove_from_cart' p.id %}"><i class="icon-remove-sign"></i></a></center>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<hr>
+			<p>
+				{% if prods %}
+				<button class="btn btn-success btn-mini" type="button"><i class="icon-ok icon-white"></i> Procesar Pedido</button> 
+				{% endif %}
+				<a href="/" class="btn btn-primary btn-mini" type="button"> <i class="icon-arrow-left icon-white"></i> Seguir Comprando</a>
+			</p>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

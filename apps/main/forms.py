@@ -8,8 +8,8 @@ from apps.main.models import *
 attrs_dict = { 'class': 'required' }
 
 class LoginForm(forms.Form):
-	usuario = forms.CharField(widget=forms.TextInput(attrs=dict(attrs_dict)))
-	password = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False))
+	usuario = forms.CharField(widget=forms.TextInput(attrs=dict({'class':'required span9','placeholder':'Usuario'})))
+	password = forms.CharField(widget=forms.PasswordInput(attrs=dict({'class':'required span9','placeholder':'Contraseña'}), render_value=False))
 
 
 
@@ -85,3 +85,9 @@ class OfertaForm(forms.ModelForm):
     fecha_inicio = forms.DateField(widget=forms.DateInput())
     class Meta:
         model = Oferta
+
+class ProductoPedidoForm(forms.ModelForm):
+
+    class Meta:
+        model = ProductoPedido
+        exclude = ('pedido',)

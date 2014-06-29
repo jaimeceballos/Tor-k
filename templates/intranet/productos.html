@@ -28,6 +28,12 @@
 		  				Marca
 		  			</td>
 		  			<td>
+		  				Stock
+		  			</td>
+		  			<td>
+		  				Costo
+		  			</td>
+		  			<td>
 		  			</td>
 		  			<td>
 		  			</td>
@@ -38,7 +44,13 @@
 					<td>{{prod.categoria}}</td>
 					<td>{{prod.nombre}}</td>
 					<td>{{prod.marca}}</td>
-					<td><center><a href="{% url 'edit_productos' prod.id %}"><i class="icon-edit"></i></a></center></td>
+					<td>
+		  				{{prod.stock_actual}}
+		  			</td>
+		  			<td>
+		  				{{prod.costo}}
+		  			</td>
+		  			<td><center><a href="{% url 'edit_productos' prod.id %}"><i class="icon-edit"></i></a></center></td>
 					<td><center><a href="{% url 'borrar_producto' prod.id %}"><i class="icon-remove-sign"></i></a></center></td>
 				</tr>
 				{% endfor %}	
