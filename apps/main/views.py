@@ -416,6 +416,18 @@ def gestion_pedidos(request):
 	}
 
 	return render_to_response('intranet/gestion_pedidos.html',values, context_instance = RequestContext(request))
+
+@login_required
+def procesa_pedido(request,id_pedido):
+	pedido = Pedido.objects.get(id=id_pedido)
+	productos_pedido = ProductoPedido.objects.filter(pedido=pedido)
+	values = {
+		'pedido':pedido,
+		'productos_pedido':productos_pedido,
+	}
+	return render_to_response('intranet/procesa_pedidos.html',values,context_instance=RequestContext(request))
+
+
 def calcular_total_pedido(request):
 	total=0
 	pedido = request.session['pedido']

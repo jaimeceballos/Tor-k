@@ -20,14 +20,13 @@
 							Fecha
 						</th>
 						<th>
-							Estado
-						</th>
-						
-						<th>
 							Forma de pago
 						</th>
 						<th>
 							Metodo de envio
+						</th>
+						<th>
+							Estado
 						</th>
 						<th>
 						</th>
@@ -46,6 +45,12 @@
 							{{pedido.fecha_carga}}
 						</td>
 						<td>
+							{{pedido.metodo_pago}}
+						</td>
+						<td>
+							{{pedido.tipo_envio}}
+						</td>
+						<td>
 							{% if pedido.estado_pedido.descripcion == 'Confirmado' %}
 								<span class="label label-important">{{pedido.estado_pedido.descripcion}}</span>
 							{% elif pedido.estado_pedido.descripcion == 'Procesado' %}
@@ -54,16 +59,9 @@
 								<span class="label label-info">{{pedido.estado_pedido.descripcion}}</span>
 							{% endif %}
 						</td>
-						
-						<td>
-							{{pedido.metodo_pago}}
-						</td>
-						<td>
-							{{pedido.tipo_envio}}
-						</td>
 						<td>
 							{% if pedido.estado_pedido.descripcion == 'Confirmado' %}
-								<a href=""><i class="icon-pencil"></i></a>
+								<a href="{% url 'procesa_pedido' pedido.id %}"><i class="icon-pencil"></i></a>
 							{% elif pedido.estado_pedido.descripcion == 'Procesado' %}
 								<a href=""><i class="icon-envelope"></i></a>
 							{% elif pedido.estado_pedido.descripcion == 'Enviado' %}

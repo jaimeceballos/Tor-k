@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block cuerpo %}
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12 well">
+			<h3 class="text-right text-info">
+				Procesar pedido N° {{pedido.id}}
+			</h3>
+			<p class="text">
+
+				<strong>Cliente: </strong> {{pedido.cliente.user.first_name}} {{pedido.cliente.user.last_name}}<br>
+				<strong>Fecha: </strong> {{pedido.fecha_carga}}<br>
+				<strong>Metodo Envio: </strong> {{pedido.tipo_envio}}<br>
+				<strong>Metodo Pago: </strong> {{pedido.metodo_pago}}<br>
+			</p>
+		</div>
+		<hr>
+		
+	</div>
+</div>
+{% endblock %}

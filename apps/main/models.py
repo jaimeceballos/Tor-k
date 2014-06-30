@@ -110,6 +110,7 @@ class Pedido(models.Model):
 	estado_pedido	= models.ForeignKey('EstadoPedido',on_delete=models.PROTECT)
 	tipo_envio		= models.ForeignKey('TipoEnvio', on_delete=models.PROTECT,null=True,blank=True)
 	metodo_pago		= models.ForeignKey('MetodoPago', on_delete=models.PROTECT,null=True,blank=True)
+	observaciones	= models.CharField(max_length=100,blank=True,null=True)
 
 	class Meta:
 		db_table	= 'pedido'
@@ -120,6 +121,8 @@ class ProductoPedido(models.Model):
 	cantidad	= models.IntegerField(null=True,blank=True)
 	anulado		= models.BooleanField(default=False)
 	costo		= models.DecimalField(max_digits=7, decimal_places=2,null=True,blank=True)
+	observaciones	= models.CharField(max_length=100,blank=True,null=True)
+
 
 	class Meta:
 		db_table	= 'producto_pedido'

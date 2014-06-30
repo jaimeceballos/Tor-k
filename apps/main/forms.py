@@ -90,7 +90,7 @@ class PedidoForm(forms.ModelForm):
 
     class Meta:
         model = Pedido
-        exclude = ('fecha_carga','cliente','estado_pedido')
+        exclude = ('fecha_carga','cliente','estado_pedido','observaciones')
 
 class ProductoPedidoForm(forms.Form):
     cantidad = forms.IntegerField(widget=forms.TextInput(attrs=dict(attrs_dict)))
