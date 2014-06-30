@@ -3,29 +3,17 @@
 {% block cuerpo %}
 <div class="container">
 	<div class="row">
-		<div class="span8">
+		<div class="span8 offset1">
 			<div class="alert alert-success">
 				 <button type="button" class="close" data-dismiss="alert">×</button>
 				<h4>
 					Aviso:
 				</h4> <strong>Su pedido ya fue enviado</strong>
 			</div>
-			<div class="accordion" id="accordion-472918">
-			{% for producto_pedido in productos_vendidos %}
-				<div class="accordion-group">
-					<div class="accordion-heading">
-						 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-472918" href="#accordion-element-747140">{{producto_pedido.pedido}}</a>
-					</div>
-					<div id="accordion-element-747140" class="accordion-body collapse in">
-						<div class="accordion-inner">
-							<p><strong>Cantidad pedida:</strong>{{producto_pedido.cantidad}}</p>
-							<p><strong>Precio Unitario:</strong>${{producto_pedido.costo}}</p>
-						</div>
-					</div>
-				</div>
-			{% endfor %}
-			</div>
-			<a class="btn btn-success btn-mini" href="/">Volver al inicio</a>
+			<form method="post" action=".">
+				{{form}}
+				<button type="submit" class="btn btn-success btn-mini">Confirmar</button>{% csrf_token %}
+			</form>
 		</div>
 	</div>
 </div>

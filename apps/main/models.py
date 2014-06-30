@@ -86,10 +86,30 @@ class Producto(models.Model):
 		db_table	= 'producto'
 
 
+class TipoEnvio(models.Model):
+	descripcion 	= models.CharField(max_length=40)
+
+	def __unicode__(self):
+		return u'%s' % self.descripcion
+
+	class Meta:
+		db_table 	= 'tipo_envio'
+
+class MetodoPago(models.Model):
+	descripcion 	= models.CharField(max_length=40)
+
+	def __unicode__(self):
+		return u'%s' % self.descripcion
+
+	class Meta:
+		db_table 	= 'metodo_pago'
+
 class Pedido(models.Model):
 	fecha_carga		= models.DateField(auto_now=True)
 	cliente 		= models.ForeignKey('UserProfile',on_delete=models.PROTECT)
 	estado_pedido	= models.ForeignKey('EstadoPedido',on_delete=models.PROTECT)
+	tipo_envio		= models.ForeignKey('TipoEnvio', on_delete=models.PROTECT,null=True,blank=True)
+	metodo_pago		= models.ForeignKey('MetodoPago', on_delete=models.PROTECT,null=True,blank=True)
 
 	class Meta:
 		db_table	= 'pedido'

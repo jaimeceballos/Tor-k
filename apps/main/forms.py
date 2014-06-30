@@ -86,5 +86,11 @@ class OfertaForm(forms.ModelForm):
     class Meta:
         model = Oferta
 
+class PedidoForm(forms.ModelForm):
+
+    class Meta:
+        model = Pedido
+        exclude = ('fecha_carga','cliente','estado_pedido')
+
 class ProductoPedidoForm(forms.Form):
     cantidad = forms.IntegerField(widget=forms.TextInput(attrs=dict(attrs_dict)))

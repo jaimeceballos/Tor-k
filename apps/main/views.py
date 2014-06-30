@@ -273,7 +273,6 @@ def remove_from_cart(request,id_prod):
 
 @login_required
 def procesar_pedido(request):
-
 	if not 'pedido' in request.session:
 		pedido = Pedido()
 		pedido.cliente = UserProfile.objects.get(user=request.user)
@@ -350,12 +349,22 @@ def confirmar_pedido(request):
  	categorias = Categoria.objects.all()
  	productos_pedidos = ProductoPedido.objects.filter(pedido=pedido)
  	info=""
+ 	if request.method == 'POST':
+ 		form = PedidoForm(request.POST)
+ 		if form.is_valid():
+ 			pedido.tipo_envio =	form.cleaned_data['tipo_envio']
+ 			pedido.metodo_pago = form.cleaned_data['metodo_pago']
+ 			pedido.save()
+			del(request.session['pedido'])
+			return HttpResponseRedirect('/')
  	if is_pedido_valid(request):
 		pedido.estado_pedido = EstadoPedido.objects.get(descripcion__contains="Confirmado")
 		pedido.save()
-		del(request.session['pedido'])
 		request.session['carrito']=[]
+		form = PedidoForm()
 		values={
+			'pedido':pedido,
+			'form':form,
 			'info':info,
 			'productos_pedidos':productos_pedidos,
 			'categorias':categorias,

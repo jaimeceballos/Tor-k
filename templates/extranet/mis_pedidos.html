@@ -20,7 +20,12 @@
 						<th>
 							Estado
 						</th>
-						
+						<th>
+							Forma de pago
+						</th>
+						<th>
+							Metodo de envio
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -39,7 +44,12 @@
 								<span class="label label-important">{{pedido.estado_pedido.descripcion}}</span>
 							{% endif %}
 						</td>
-						
+						<td>
+							{{pedido.metodo_pago}}
+						</td>
+						<td>
+							{{pedido.tipo_envio}}
+						</td>
 					</tr>
 					{% endfor %}	
 				</tbody>
