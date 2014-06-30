@@ -20,4 +20,8 @@ $(document).ready(function() {
                 $("#id_producto option:first").attr('selected', 'selected');
               }, "json");
            });
+
+  $('#table').dataTable( {
+          "aaSorting": [[ 1, "desc" ]]
+    } );
  });

@@ -8,7 +8,7 @@
 				Productos en mi carrito
 			</h3>
 			<hr>
-			<table class="table">
+			<table class="table table-condensed table-bordered table-hover" id="table" name="table">
 				<thead>
 					<tr>
 						<th>
@@ -46,7 +46,7 @@
 			<hr>
 			<p>
 				{% if prods %}
-				<button class="btn btn-success btn-mini" type="button"><i class="icon-ok icon-white"></i> Procesar Pedido</button> 
+				<a href="{% url 'procesar_pedido' %}" class="btn btn-success btn-mini"><i class="icon-ok icon-white"></i> Procesar Pedido</a> 
 				{% endif %}
 				<a href="/" class="btn btn-primary btn-mini" type="button"> <i class="icon-arrow-left icon-white"></i> Seguir Comprando</a>
 			</p>

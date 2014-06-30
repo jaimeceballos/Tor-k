@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^producto/ver/(?P<id_prod>\d+)/$', ver_producto, name='ver_producto'),
     url(r'^micarrito/$', ver_carrito, name='ver_carrito'),
     url(r'^micarrito/remove/(?P<id_prod>\d+)/$', remove_from_cart, name='remove_from_cart'),
+    url(r'^procesarpedido/$', procesar_pedido, name='procesar_pedido'),
 
     
 	

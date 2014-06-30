@@ -17,6 +17,7 @@ from django.views.decorators.cache import cache_control
 # Create your views here.
 
 @login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def categorias(request):
 	categoria = CategoriaForm()
 	categorias = Categoria.objects.all()
@@ -35,6 +36,7 @@ def categorias(request):
 
 
 @login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def borrar_categoria(request, id_cat):
 
 	categoria = get_object_or_404(Categoria, id = id_cat) 
@@ -53,6 +55,7 @@ def borrar_categoria(request, id_cat):
  	return render_to_response('intranet/categorias.html',values, context_instance = RequestContext(request))
 
 @login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def edit_categorias(request,id_cat):
 	cat = Categoria.objects.get(id=id_cat)
 	categoria = CategoriaForm(instance=cat)
@@ -74,6 +77,7 @@ def edit_categorias(request,id_cat):
 	return render_to_response('intranet/edit_categorias.html',values, context_instance = RequestContext(request))
 
 @login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def productos(request):
 	producto = ProductoForm()
 	productos = Producto.objects.all()
@@ -92,6 +96,7 @@ def productos(request):
 
 	return render_to_response('intranet/productos.html',values, context_instance = RequestContext(request))
 @login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def edit_productos(request,id_prod):
 	prod = Producto.objects.get(id=id_prod)
 	producto = ProductoForm()
@@ -123,6 +128,7 @@ def edit_productos(request,id_prod):
 	return render_to_response('intranet/edit_productos.html',values, context_instance = RequestContext(request))
 
 @login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def borrar_producto(request, id_prod):
 
 	producto = get_object_or_404(Producto, id = id_prod) 
@@ -140,6 +146,7 @@ def borrar_producto(request, id_prod):
  	return render_to_response('intranet/productos.html',values, context_instance = RequestContext(request))
 
 @login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def ofertas(request):
 	categorias = Categoria.objects.all()
 	oferta     = OfertaForm()
@@ -157,6 +164,7 @@ def ofertas(request):
  	return render_to_response('intranet/ofertas.html',values, context_instance = RequestContext(request))
 
 @login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def borrar_oferta(request,id_oferta):
 
 	oferta = get_object_or_404(Oferta, id = id_oferta)
@@ -175,6 +183,7 @@ def borrar_oferta(request,id_oferta):
  	return render_to_response('intranet/ofertas.html',values, context_instance = RequestContext(request))
 
 @login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def edit_ofertas(request,id_oferta):
 	of 		   = Oferta.objects.get(id=id_oferta)
 	categorias = Categoria.objects.all()
@@ -202,16 +211,19 @@ def edit_ofertas(request,id_oferta):
 
 
 @login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def obtener_productos(request,id_cat):
 	data = request.POST
 	productos = Producto.objects.filter(categoria = id_cat)
 	data = serializers.serialize("json", productos)
 	return HttpResponse(data, mimetype='application/json')
 
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def ver_producto(request,id_prod):
 	form = LoginForm()
 	categorias = Categoria.objects.all()
 	prod = Producto.objects.get(id=id_prod)
+	info=""
 	if request.method == 'POST':
 		if not request.user.is_authenticated():
 			
@@ -223,14 +235,17 @@ def ver_producto(request,id_prod):
 			return render_to_response('internet/must_login.html',values, context_instance = RequestContext(request))
 		else:
 			lista = request.session['carrito']
-			lista.append(Producto.objects.get(id=id_prod))
-			request.session['carrito'] = lista
-			
-
+			if Producto.objects.get(id=id_prod) in lista:
+				info = "ya se encuentra en su carrito"
+			else:
+				lista.append(Producto.objects.get(id=id_prod))
+				request.session['carrito'] = lista
+				info = "se agrego a su carrito."	
+				request.session['cant'] = len(lista)
 	categorias = Categoria.objects.all()
 	prod = Producto.objects.get(id=id_prod)
-
 	values={
+		'info':info,
 		'form':form,
  		'categorias':categorias,
  		'prod':prod,
@@ -238,6 +253,7 @@ def ver_producto(request,id_prod):
  	return render_to_response('internet/ver_producto.html',values, context_instance = RequestContext(request))
 
 @login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def ver_carrito(request):
 	carrito = request.session['carrito']
 	productos, ofertas = productos_publicar()
@@ -259,8 +275,27 @@ def ver_carrito(request):
  	return render_to_response('extranet/ver_carrito.html',values, context_instance = RequestContext(request))
 
 @login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
 def remove_from_cart(request,id_prod):
 	carrito = request.session['carrito']
 	carrito.remove(Producto.objects.get(id=id_prod))
 	request.session['carrito'] = carrito
 	return HttpResponseRedirect(reverse('ver_carrito'))
+
+@login_required
+@cache_control(must_revalidate=True, max_age=3600, private=True)
+def procesar_pedido(request):
+	if not 'pedido' in request.session:
+		pedido = Pedido()
+		pedido.cliente = UserProfile.objects.get(user=request.user)
+		pedido.estado_pedido = EstadoPedido.objects.get(descripcion__contains='Creado')
+		pedido.save()
+		request.session['pedido'] = pedido
+	else:
+		pedido = request.session['pedido']
+	categorias = Categoria.objects.all()
+	values={
+		'pedido':pedido,
+		'categorias':categorias,
+ 	}
+ 	return render_to_response('extranet/procesar_pedido.html',values, context_instance = RequestContext(request))
