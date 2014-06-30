@@ -29,17 +29,10 @@
           <i class="icon-tasks"></i>Gestion de Ofertas</a>
     </li>
     <li>
-        <a href="">
-          <i class="icon-tasks"></i>Pedidos Pendientes</a>
+        <a href="{% url 'gestion_pedidos' %}">
+          <i class="icon-tasks"></i>Gestion de pedidos</a>
     </li>
-    <li>
-        <a href="">
-          <i class="icon-tasks"></i>Pedidos Procesados</a>
-    </li>
-    <li>
-        <a href="">
-          <i class="icon-tasks"></i>Envio de Pedidos</a>
-    </li>
+    
     {% else %}
     <li>
         <a href="{% url 'ver_carrito' %}">

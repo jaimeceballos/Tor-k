@@ -22,6 +22,7 @@
 					<form class="form-inline" method="post" action".">{% csrf_token %}
 						<fieldset>
 							 <legend>{{prod}}</legend> 
+							 
 							 {% if prod.stock_actual > 0 %}
 							   <button type="submit" class="btn btn-success btn-mini"><i class="icon-shopping-cart icon-white"></i><strong>Comprar</strong></button>
 							 {% else %}

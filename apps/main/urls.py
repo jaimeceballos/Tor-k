@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^procesarpedido/confirmar/$', confirmar_pedido, name='confirmar_pedido'),
     url(r'^procesarpedido/cancelar/$', cancelar_pedido, name='cancelar_pedido'),
     url(r'^mispedidos/$', mis_pedidos, name='mis_pedidos'),
+    url(r'^gestionpedidos/$', gestion_pedidos, name='gestion_pedidos'),
 
     
 	

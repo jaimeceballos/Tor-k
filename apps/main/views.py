@@ -398,6 +398,15 @@ def mis_pedidos(request):
  		}
  	return render_to_response('extranet/mis_pedidos.html',values, context_instance = RequestContext(request))
 
+@login_required
+def gestion_pedidos(request):
+	pedidos_pendientes = Pedido.objects.filter(estado_pedido=EstadoPedido.objects.get(descripcion__contains="Confirmado"))
+
+	values = {
+		'pedidos':pedidos_pendientes,
+	}
+
+	return render_to_response('intranet/gestion_pedidos.html',values, context_instance = RequestContext(request))
 def calcular_total_pedido(request):
 	total=0
 	pedido = request.session['pedido']
