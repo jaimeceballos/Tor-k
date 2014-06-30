@@ -16,21 +16,30 @@
 		</ul>
 	</form>
 	<h3>Listado de categorias</h3>
-	<table class="table table-bordered">
-  		<th>
-  			<td>
-  				Descripcion	
-  			</td>
-  			<td>
-  			</td>
-  		</th>
+	<table class="table table-condensed table-bordered table-hover" id="table" name="table">
+  		<thead>
+  			<tr>
+  				<th>
+  				</th>
+	  			<th>
+	  				Descripcion	
+	  			</th>
+	  			<th>
+	  			</th>
+	  			<th>
+	  			</th>
+  			</tr>
+  		</thead>
+  		<tbody>
   		{% for cat in categorias %}
-		<tr>
-			<td>{{cat.id}}</td>
-			<td>{{cat.descripcion}}</td>
-			<td><a href="{% url 'edit_categorias' cat.id %}"><i class="icon-edit"></i></a><a href="{% url 'borrar_categoria' cat.id %}"><i class="icon-trash"></i></a></td>
-		</tr>
+			<tr>
+				<td>{{cat.id}}</td>
+				<td>{{cat.descripcion}}</td>
+				<td><a href="{% url 'edit_categorias' cat.id %}"><i class="icon-edit"></i></a></td>
+				<td><a href="{% url 'borrar_categoria' cat.id %}"><i class="icon-trash"></i></a></td>
+			</tr>
 		{% endfor %}	
+		</tbody>
 	</table>
 
 

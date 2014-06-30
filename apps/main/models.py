@@ -67,7 +67,7 @@ class Producto(models.Model):
 	categoria 		= models.ForeignKey('Categoria',on_delete=models.PROTECT)
 	nombre			= models.CharField(max_length=100)
 	marca			= models.CharField(max_length=100)
-	espec			= models.TextField(max_length=250)
+	espec			= models.TextField(max_length=250,null=True,blank=True)
 	stock_minimo	= models.IntegerField()
 	punto_reorden	= models.IntegerField()
 	stock_maximo	= models.IntegerField()
@@ -97,9 +97,9 @@ class Pedido(models.Model):
 class ProductoPedido(models.Model):
 	pedido 		= models.ForeignKey('Pedido',on_delete=models.PROTECT)
 	producto 	= models.ForeignKey('Producto',on_delete=models.PROTECT)
-	cantidad	= models.IntegerField()
+	cantidad	= models.IntegerField(null=True,blank=True)
 	anulado		= models.BooleanField(default=False)
-	costo		= models.DecimalField(max_digits=5, decimal_places=2)
+	costo		= models.DecimalField(max_digits=7, decimal_places=2,null=True,blank=True)
 
 	class Meta:
 		db_table	= 'producto_pedido'

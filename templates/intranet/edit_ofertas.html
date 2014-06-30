@@ -38,29 +38,35 @@
 		</div>
 	</div>
 	<h3>Listado de ofertas</h3>
-			<table class="table table-bordered">
-		  		<th>
-		  			<td>
-		  				Categoria
-		  			</td>
-		  			<td>
-		  				Descripcion	
-		  			</td>
-		  			<td>
-		  				Costo
-		  			</td>
-		  			<td>
-		  				Desde
-		  			</td>
-		  			<td>
-		  				Hasta
-		  			</td>
-		  			<td>
-		  			</td>
-		  			<td>
-		  			</td>
-		  		</th>
+			<table class="table table-condensed table-bordered table-hover" id="table" name="table">
+		  		<thead>
+		  				<th>
+		  					
+		  				</th>
+			  			<th>
+			  				Categoria
+			  			</th>
+			  			<th>
+			  				Descripcion	
+			  			</th>
+			  			<th>
+			  				Costo
+			  			</th>
+			  			<th>
+			  				Desde
+			  			</td>
+			  			<th>
+			  				Hasta
+			  			</th>
+			  			<th>
+			  			</th>
+			  			<th>
+			  			</th>
+			  		
+		  		</thead>
+
 		  		{% for oferta in ofertas %}
+		  		<tbody>
 				<tr>
 					<td>{{oferta.id}}</td>
 					<td>{{oferta.producto.categoria}}</td>
@@ -71,6 +77,7 @@
 					<td><center><a href="{% url 'edit_ofertas' oferta.id %}"><i class="icon-edit"></i></a></center></td>
 					<td><center><a href="{% url 'borrar_oferta' oferta.id %}"><i class="icon-remove-sign"></i></a></center></td>
 				</tr>
+				</tbody>
 				{% endfor %}	
 			</table>
 

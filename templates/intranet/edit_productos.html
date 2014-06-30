@@ -25,23 +25,29 @@
 		</div>
 	</div>
 	<h3>Listado de productos</h3>
-			<table class="table table-bordered">
-		  		<th>
-		  			<td>
-		  				Categoria
-		  			</td>
-		  			<td>
-		  				Descripcion	
-		  			</td>
-		  			<td>
-		  				Marca
-		  			</td>
-		  			<td>
-		  			</td>
-		  			<td>
-		  			</td>
-		  		</th>
+			<table class="table table-condensed table-bordered table-hover" id="table" name="table">
+		  		<thead>
+			  		<tr>
+			  			<th>
+			  				
+			  			</th>
+			  			<th>
+			  				Categoria
+			  			</th>
+			  			<th>
+			  				Descripcion	
+			  			</th>
+			  			<th>
+			  				Marca
+			  			</th>
+			  			<th>
+			  			</th>
+			  			<th>
+			  			</th>
+			  		</tr>
+		  		</thead>
 		  		{% for prod in productos %}
+		  		<tbody>
 				<tr>
 					<td>{{prod.id}}</td>
 					<td>{{prod.categoria}}</td>
@@ -50,6 +56,7 @@
 					<td><center><a href="{% url 'edit_productos' prod.id %}"><i class="icon-edit"></i></a></center></td>
 					<td><center><a href="{% url 'borrar_producto' prod.id %}"><i class="icon-remove-sign"></i></a></center></td>
 				</tr>
+				</tbody>
 				{% endfor %}	
 			</table>
 {% endblock %}

@@ -1,12 +1,6 @@
 {% extends "base.html" %}
 {% block cuerpo %}
-{% if not info == "" %}
-		<div class="alert alert-info">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <strong>{{prod}} {{info}}</strong> 
-      	</div>
-{% endif %}
-<form method="post" action".">
+	
 <div class="container-fluid">
 	<div class="row-fluid">
 		<div class="span12 well">
@@ -19,6 +13,13 @@
 		</div>
 		<hr>
 	</div>
+	<div class="span12">
+			<form class="form-inline" method="POST" action="{% url 'procesar_pedido_producto' producto.id %}">
+				<fieldset>
+					 <legend>{{producto}}</legend> {{form}} <button type="submit" class="btn btn-success">Confirmar</button>{% csrf_token %}
+				</fieldset>
+			</form>
+		</div>
 	<div class="row-fluid">
 		<div class="span12">
 			<table class="table table-condensed table-bordered table-hover" id="table">
@@ -61,11 +62,7 @@
 					</tr>	
 				</tfoot>
 			</table>
-			
 		</div>
-		<a href="{% url 'confirmar_pedido' %}" class="btn btn-success btn-mini"><i class="icon-ok icon-white"></i> Confirmar Pedido</a>{% csrf_token %}
-		<a href="{% url 'cancelar_pedido' %}" class="btn btn-primary btn-mini" type="button"> <i class="icon-remove icon-white"></i> Cancelar Pedido</a>
 	</div>
 </div>
-</form>
 {% endblock %}

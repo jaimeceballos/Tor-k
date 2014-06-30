@@ -16,6 +16,10 @@ urlpatterns = patterns('',
     url(r'^micarrito/$', ver_carrito, name='ver_carrito'),
     url(r'^micarrito/remove/(?P<id_prod>\d+)/$', remove_from_cart, name='remove_from_cart'),
     url(r'^procesarpedido/$', procesar_pedido, name='procesar_pedido'),
+    url(r'^procesarpedido/(?P<id_prod>\d+)/$', procesar_pedido_producto, name='procesar_pedido_producto'),
+    url(r'^procesarpedido/confirmar/$', confirmar_pedido, name='confirmar_pedido'),
+    url(r'^procesarpedido/cancelar/$', cancelar_pedido, name='cancelar_pedido'),
+    url(r'^mispedidos/$', mis_pedidos, name='mis_pedidos'),
 
     
 	

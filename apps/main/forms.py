@@ -86,8 +86,5 @@ class OfertaForm(forms.ModelForm):
     class Meta:
         model = Oferta
 
-class ProductoPedidoForm(forms.ModelForm):
-
-    class Meta:
-        model = ProductoPedido
-        exclude = ('pedido',)
+class ProductoPedidoForm(forms.Form):
+    cantidad = forms.IntegerField(widget=forms.TextInput(attrs=dict(attrs_dict)))

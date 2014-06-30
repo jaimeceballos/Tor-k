@@ -17,7 +17,6 @@ from django.views.decorators.cache import cache_control
 # Create your views here.
 
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def categorias(request):
 	categoria = CategoriaForm()
 	categorias = Categoria.objects.all()
@@ -36,7 +35,6 @@ def categorias(request):
 
 
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def borrar_categoria(request, id_cat):
 
 	categoria = get_object_or_404(Categoria, id = id_cat) 
@@ -55,7 +53,6 @@ def borrar_categoria(request, id_cat):
  	return render_to_response('intranet/categorias.html',values, context_instance = RequestContext(request))
 
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def edit_categorias(request,id_cat):
 	cat = Categoria.objects.get(id=id_cat)
 	categoria = CategoriaForm(instance=cat)
@@ -77,7 +74,6 @@ def edit_categorias(request,id_cat):
 	return render_to_response('intranet/edit_categorias.html',values, context_instance = RequestContext(request))
 
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def productos(request):
 	producto = ProductoForm()
 	productos = Producto.objects.all()
@@ -96,7 +92,6 @@ def productos(request):
 
 	return render_to_response('intranet/productos.html',values, context_instance = RequestContext(request))
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def edit_productos(request,id_prod):
 	prod = Producto.objects.get(id=id_prod)
 	producto = ProductoForm()
@@ -128,7 +123,6 @@ def edit_productos(request,id_prod):
 	return render_to_response('intranet/edit_productos.html',values, context_instance = RequestContext(request))
 
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def borrar_producto(request, id_prod):
 
 	producto = get_object_or_404(Producto, id = id_prod) 
@@ -146,7 +140,6 @@ def borrar_producto(request, id_prod):
  	return render_to_response('intranet/productos.html',values, context_instance = RequestContext(request))
 
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def ofertas(request):
 	categorias = Categoria.objects.all()
 	oferta     = OfertaForm()
@@ -164,7 +157,6 @@ def ofertas(request):
  	return render_to_response('intranet/ofertas.html',values, context_instance = RequestContext(request))
 
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def borrar_oferta(request,id_oferta):
 
 	oferta = get_object_or_404(Oferta, id = id_oferta)
@@ -183,7 +175,6 @@ def borrar_oferta(request,id_oferta):
  	return render_to_response('intranet/ofertas.html',values, context_instance = RequestContext(request))
 
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def edit_ofertas(request,id_oferta):
 	of 		   = Oferta.objects.get(id=id_oferta)
 	categorias = Categoria.objects.all()
@@ -211,14 +202,12 @@ def edit_ofertas(request,id_oferta):
 
 
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def obtener_productos(request,id_cat):
 	data = request.POST
 	productos = Producto.objects.filter(categoria = id_cat)
 	data = serializers.serialize("json", productos)
 	return HttpResponse(data, mimetype='application/json')
 
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def ver_producto(request,id_prod):
 	form = LoginForm()
 	categorias = Categoria.objects.all()
@@ -237,6 +226,8 @@ def ver_producto(request,id_prod):
 			lista = request.session['carrito']
 			if Producto.objects.get(id=id_prod) in lista:
 				info = "ya se encuentra en su carrito"
+			elif Producto.objects.get(id=id_prod).stock_actual == 0:
+				info = "temporalmente fuera de stock."
 			else:
 				lista.append(Producto.objects.get(id=id_prod))
 				request.session['carrito'] = lista
@@ -253,7 +244,6 @@ def ver_producto(request,id_prod):
  	return render_to_response('internet/ver_producto.html',values, context_instance = RequestContext(request))
 
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def ver_carrito(request):
 	carrito = request.session['carrito']
 	productos, ofertas = productos_publicar()
@@ -275,7 +265,6 @@ def ver_carrito(request):
  	return render_to_response('extranet/ver_carrito.html',values, context_instance = RequestContext(request))
 
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def remove_from_cart(request,id_prod):
 	carrito = request.session['carrito']
 	carrito.remove(Producto.objects.get(id=id_prod))
@@ -283,19 +272,145 @@ def remove_from_cart(request,id_prod):
 	return HttpResponseRedirect(reverse('ver_carrito'))
 
 @login_required
-@cache_control(must_revalidate=True, max_age=3600, private=True)
 def procesar_pedido(request):
+
 	if not 'pedido' in request.session:
 		pedido = Pedido()
 		pedido.cliente = UserProfile.objects.get(user=request.user)
 		pedido.estado_pedido = EstadoPedido.objects.get(descripcion__contains='Creado')
 		pedido.save()
+		carrito = request.session['carrito']
+		productos, ofertas = productos_publicar()
+		prods = []
+		for producto in carrito:
+
+			try:
+				if ofertas.get(producto=producto):
+					p = ofertas.get(producto=producto).producto
+					p.costo = ofertas.get(producto=producto).costo
+					prods.append(p)
+			except:
+				prods.append(producto)
+		for producto in prods:
+			prodpedido = ProductoPedido()
+			prodpedido.pedido = pedido
+			prodpedido.producto = producto
+			prodpedido.costo = producto.costo
+			prodpedido.save()
+
+				
 		request.session['pedido'] = pedido
 	else:
 		pedido = request.session['pedido']
+	productos_pedidos = ProductoPedido.objects.filter(pedido=pedido)
 	categorias = Categoria.objects.all()
 	values={
+		'info':'',
+		'total':calcular_total_pedido(request),
 		'pedido':pedido,
+		'productos_pedidos':productos_pedidos,
 		'categorias':categorias,
  	}
  	return render_to_response('extranet/procesar_pedido.html',values, context_instance = RequestContext(request))
+
+@login_required
+def procesar_pedido_producto(request,id_prod):
+	pedido = request.session['pedido']
+	productos_pedidos = ProductoPedido.objects.filter(pedido = pedido)
+	categorias = Categoria.objects.all()
+	form = ProductoPedidoForm()
+	producto = Producto.objects.get(id = id_prod)
+	info=""
+	if request.method == 'POST':
+		form = ProductoPedidoForm(request.POST)
+		if form.is_valid():
+			producto = Producto.objects.get(id=id_prod)
+			cantidad_pedida = form.cleaned_data['cantidad']
+			producto_pedido = productos_pedidos.get(producto=producto)
+			if producto.stock_actual - cantidad_pedida >= 0:
+				producto.stock_actual = producto.stock_actual - cantidad_pedida
+				producto.save()
+				producto_pedido.cantidad = cantidad_pedida
+				producto_pedido.save()
+				return HttpResponseRedirect(reverse('procesar_pedido'))
+			else:
+				info = "La cantidad ingresada no puede ser vendida."
+	values={
+		'form':form,
+		'producto':producto,
+		'pedido':pedido,
+		'productos_pedidos':productos_pedidos,
+		'categorias':categorias,
+ 	}
+ 	return render_to_response('extranet/procesar_pedido_producto.html',values, context_instance = RequestContext(request))	
+
+@login_required
+def confirmar_pedido(request):
+ 	pedido = request.session['pedido']
+ 	categorias = Categoria.objects.all()
+ 	productos_pedidos = ProductoPedido.objects.filter(pedido=pedido)
+ 	info=""
+ 	if is_pedido_valid(request):
+		pedido.estado_pedido = EstadoPedido.objects.get(descripcion__contains="Confirmado")
+		pedido.save()
+		del(request.session['pedido'])
+		request.session['carrito']=[]
+		values={
+			'info':info,
+			'productos_pedidos':productos_pedidos,
+			'categorias':categorias,
+ 		}
+ 		return render_to_response('extranet/pedido_ok.html',values, context_instance = RequestContext(request))			
+ 	else:
+ 		info="Verifique que haya seleccionado la cantidad en cada producto pedido."
+ 		values={
+ 			'info':info,
+			'total':calcular_total_pedido(request),
+			'pedido':pedido,
+			'productos_pedidos':productos_pedidos,
+			'categorias':categorias,
+ 		}
+ 		return render_to_response('extranet/procesar_pedido.html',values, context_instance = RequestContext(request))
+
+@login_required
+def cancelar_pedido(request):
+	pedido = request.session['pedido']
+	productos_pedidos = ProductoPedido.objects.filter(pedido=pedido)
+ 	info=""
+	for producto_pedido in productos_pedidos:
+		producto = producto_pedido.producto
+		if producto_pedido.cantidad:
+			producto.stock_actual = producto.stock_actual+producto_pedido.cantidad
+			producto.save()
+		producto_pedido.delete()
+	pedido.delete()
+	del(request.session['pedido'])
+	request.session['carrito']=[]
+	return HttpResponseRedirect('/')
+
+@login_required
+def mis_pedidos(request):
+	categorias = Categoria.objects.all()
+	pedidos = Pedido.objects.filter(cliente=request.user)
+	values={	
+ 			'pedidos':pedidos,
+			'categorias':categorias,
+ 		}
+ 	return render_to_response('extranet/mis_pedidos.html',values, context_instance = RequestContext(request))
+
+def calcular_total_pedido(request):
+	total=0
+	pedido = request.session['pedido']
+	productos_pedidos = ProductoPedido.objects.filter(pedido = pedido)
+	for producto_pedido in productos_pedidos:
+		if producto_pedido.cantidad:
+			total = total +(producto_pedido.cantidad*producto_pedido.costo)
+	return total
+
+def is_pedido_valid(request):
+	pedido = request.session['pedido']
+	productos_pedidos = ProductoPedido.objects.filter(pedido=pedido)
+	for producto_pedido in productos_pedidos:
+		if not producto_pedido.cantidad:
+			return False
+	return True
