@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^mispedidos/$', mis_pedidos, name='mis_pedidos'),
     url(r'^gestionpedidos/$', gestion_pedidos, name='gestion_pedidos'),
     url(r'^procesapedido/(?P<id_pedido>\d+)/$', procesa_pedido, name='procesa_pedido'),
+    url(r'^procesapedido/anularitem/(?P<id_prodpedido>\d+)/$', anula_item, name='anula_item'),
 
     
 	

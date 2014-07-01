@@ -15,8 +15,57 @@
 				<strong>Metodo Pago: </strong> {{pedido.metodo_pago}}<br>
 			</p>
 		</div>
+		<br>
 		<hr>
-		
+		<div class="span12">
+			<div class="accordion" id="accordion-92997">
+				{% for item in productos_pedido %}
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-92997" href="#accordion-element-{{item.producto.id}}">{{item.producto}}</a> 
+					</div>
+					<div id="accordion-element-{{item.producto.id}}" class="accordion-body collapse">
+						<div class="accordion-inner">
+							{% if not item.anulado %}
+								<p><strong>Cantidad Pedida: </strong>{{item.cantidad}}</p>
+								<p><strong>Cantidad Disponible: </strong>{{item.producto.stock_actual}}</p>
+								{% if item.cantidad > item.producto.stock_actual %}
+									<p>
+										<a id="modal-{{item.producto.id}}" href="#modal-container-{{item.producto.id}}" role="button" class="btn btn-danger btn-mini" data-toggle="modal">Anular Producto</a>
+									<div id="modal-container-{{item.producto.id}}" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<form method="POST" action="{% url 'anula_item' item.id %}">{% csrf_token %}
+										<div class="modal-header">
+											 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+											<h3 id="myModalLabel">
+												Anular Producto
+											</h3>
+										</div>
+										<div class="modal-body">
+											
+											<p>
+												<label for="observaciones">Describa brevemente el motivo de la anulacion</label>
+												<textarea id="observaciones" name="observaciones"></textarea>
+											</p>
+											
+										</div>
+										<div class="modal-footer">
+											 <button class="btn btn-mini" data-dismiss="modal" aria-hidden="true">Cerrar</button> <button class="btn btn-primary btn-mini">Guardar</button>
+										</div>
+										</form>
+									</div>
+								{% else %}
+									<span class="label label-success">Pedido ok</span>	
+								{% endif %}
+							{% else %}
+								<span class="label label-important">Anulado</span>
+								<p><strong>Motivo: </strong> {{item.observaciones}}
+							{% endif %}
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}

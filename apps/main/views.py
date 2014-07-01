@@ -326,14 +326,10 @@ def procesar_pedido_producto(request,id_prod):
 			producto = Producto.objects.get(id=id_prod)
 			cantidad_pedida = form.cleaned_data['cantidad']
 			producto_pedido = productos_pedidos.get(producto=producto)
-			if producto.stock_actual - cantidad_pedida >= 0:
-				producto.stock_actual = producto.stock_actual - cantidad_pedida
-				producto.save()
-				producto_pedido.cantidad = cantidad_pedida
-				producto_pedido.save()
-				return HttpResponseRedirect(reverse('procesar_pedido'))
-			else:
-				info = "La cantidad ingresada no puede ser vendida."
+			producto_pedido.cantidad = cantidad_pedida
+			producto_pedido.save()
+			return HttpResponseRedirect(reverse('procesar_pedido'))
+			
 	values={
 		'form':form,
 		'producto':producto,
@@ -421,11 +417,22 @@ def gestion_pedidos(request):
 def procesa_pedido(request,id_pedido):
 	pedido = Pedido.objects.get(id=id_pedido)
 	productos_pedido = ProductoPedido.objects.filter(pedido=pedido)
+	form = ProductoPedidoForm()
 	values = {
+		'form':form,
 		'pedido':pedido,
 		'productos_pedido':productos_pedido,
 	}
 	return render_to_response('intranet/procesa_pedidos.html',values,context_instance=RequestContext(request))
+
+@login_required
+def anula_item(request,id_prodpedido):
+	producto_pedido = ProductoPedido.objects.get(id = id_prodpedido)
+	if request.method=='POST':
+		producto_pedido.observaciones = request.POST['observaciones']
+		producto_pedido.anulado = True
+		producto_pedido.save()	
+	return HttpResponseRedirect(reverse('procesa_pedido',kwargs={'id_prodpedido': producto_pedido.pedido.id}))
 
 
 def calcular_total_pedido(request):

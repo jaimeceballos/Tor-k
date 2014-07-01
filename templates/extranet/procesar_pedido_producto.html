@@ -16,7 +16,7 @@
 	<div class="span12">
 			<form class="form-inline" method="POST" action="{% url 'procesar_pedido_producto' producto.id %}">
 				<fieldset>
-					 <legend>{{producto}}</legend> {{form}} <button type="submit" class="btn btn-success">Confirmar</button>{% csrf_token %}
+					 <legend>{{producto}}</legend> {{form.cantidad}} <button type="submit" class="btn btn-success">Confirmar</button>{% csrf_token %}
 				</fieldset>
 			</form>
 		</div>
