@@ -1,7 +1,7 @@
 <ul class="nav nav-list">
 	<li class="nav-header">Categorias<hr></li>
 	{% for categoria in categorias %}
-		<li><a href="#">{{categoria}}</a></li>
+		<li><a href="{% url 'ver_categoria' categoria.id %}">{{categoria}}</a></li>
 	{% endfor %}
 </ul>
           		

@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response, get_object_or_404
 from django.template.loader import get_template
 from django.template import Context
 from django.http import HttpResponseRedirect, HttpResponse, Http404
-import datetime
+from datetime import datetime,date
 from django.conf import settings
 from django.template import RequestContext
 from apps.main.models import *
@@ -383,10 +383,6 @@ def cancelar_pedido(request):
 	productos_pedidos = ProductoPedido.objects.filter(pedido=pedido)
  	info=""
 	for producto_pedido in productos_pedidos:
-		producto = producto_pedido.producto
-		if producto_pedido.cantidad:
-			producto.stock_actual = producto.stock_actual+producto_pedido.cantidad
-			producto.save()
 		producto_pedido.delete()
 	pedido.delete()
 	del(request.session['pedido'])
@@ -406,7 +402,6 @@ def mis_pedidos(request):
 @login_required
 def gestion_pedidos(request):
 	pedidos_pendientes = Pedido.objects.all()
-	pedidos_pendientes = pedidos_pendientes.exclude(estado_pedido=EstadoPedido.objects.get(descripcion__contains="Enviado"))
 	pedidos_pendientes = pedidos_pendientes.exclude(estado_pedido=EstadoPedido.objects.get(descripcion__contains="Finalizado"))
 	values = {
 		'pedidos':pedidos_pendientes,
@@ -498,6 +493,77 @@ def rechazar_pedido(request,id_pedido):
 		pedido.save()	
 	return HttpResponseRedirect(reverse('gestion_pedidos'))
 
+@login_required
+def despachar_pedido(request,id_pedido):
+	pedido = Pedido.objects.get(id=id_pedido)
+	pedido.estado_pedido = EstadoPedido.objects.get(descripcion__contains='Enviado')
+	pedido.save()
+	return HttpResponseRedirect(reverse('gestion_pedidos'))
+
+@login_required
+def mis_facturas(request):
+	categorias = Categoria.objects.all()
+	facturas = Factura.objects.filter(cliente = UserProfile.objects.get(user=request.user))
+	values={
+		'categorias':categorias,
+		'facturas':facturas,
+
+	}
+	return render_to_response('extranet/mis_facturas.html',values,context_instance=RequestContext(request))
+
+@login_required
+def registrar_pago(request,id_pedido):
+	pedido = Pedido.objects.get(id=id_pedido)
+	factura = pedido.factura_pedido
+	factura.fecha_pago = date.today()
+	factura.pagado = True
+	factura.save()
+	pedido.estado_pedido = EstadoPedido.objects.get(descripcion__contains="Finalizado")
+	pedido.save()
+	return HttpResponseRedirect(reverse('gestion_pedidos'))
+
+@login_required
+def ver_factura(request,id_factura):
+	factura = Factura.objects.get(id = id_factura)
+	detalle = factura.detalle.all()
+	categorias = Categoria.objects.all()
+	values={
+		'factura':factura,
+		'detalle':detalle,
+		'categorias':categorias,
+	}
+	return render_to_response('extranet/factura.html',values,context_instance=RequestContext(request))
+
+
+def ver_categoria(request,id_cat):
+	categoria = Categoria.objects.get(id=id_cat)
+	ofertas = Oferta.objects.all()
+	of1 = ofertas.exclude(fecha_inicio__gte=datetime.now())
+	ofertas = ofertas.exclude(fecha_fin__lte=datetime.now())
+	for oferta in ofertas:
+		producto = oferta.producto
+		if not producto.categoria == categoria:
+			ofertas = ofertas.exclude(id=oferta.id)
+	
+	productos = Producto.objects.all()
+	for of in ofertas:
+		p = of.producto.id
+		producto = producto.exclude(id=p)
+	for producto in productos:
+		if not producto.categoria == categoria:
+			productos = productos.exclude(id = producto.id)
+	categorias = Categoria.objects.all()
+	form = LoginForm()
+	values={
+		'form':form,
+		'categorias':categorias,
+		'ofertas':ofertas,
+		'productos':productos,
+	}
+	return render_to_response('internet/cuerpo.html',values, context_instance = RequestContext(request))
+
+
+
 def calcular_total_pedido(request):
 	total=0
 	pedido = request.session['pedido']
@@ -514,3 +580,5 @@ def is_pedido_valid(request):
 		if not producto_pedido.cantidad:
 			return False
 	return True
+
+

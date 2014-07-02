@@ -25,7 +25,9 @@ urlpatterns = patterns('',
     url(r'^procesapedido/anularitem/(?P<id_prodpedido>\d+)/$', anula_item, name='anula_item'),
     url(r'^procesapedido/facturar/(?P<id_pedido>\d+)/$', facturar_pedido, name='facturar_pedido'),
     url(r'^procesapedido/rechazar/(?P<id_pedido>\d+)/$', rechazar_pedido, name='rechazar_pedido'),
-
-    
-	
+    url(r'^procesapedido/despachar/(?P<id_pedido>\d+)/$', despachar_pedido, name='despachar_pedido'),
+    url(r'^procesapedido/registrarpago/(?P<id_pedido>\d+)/$', registrar_pago, name='registrar_pago'),
+    url(r'^misfacturas/$', mis_facturas, name='mis_facturas'),
+    url(r'^misfacturas/ver/(?P<id_factura>\d+)/$', ver_factura, name='ver_factura'),
+	url(r'^ver/(?P<id_cat>\d+)/$', ver_categoria, name='ver_categoria'),
 )

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block cuerpo %}
+
+<form method="post" action="{% url 'facturar_pedido' factura.pedido.id %}"> {%csrf_token%} 
+<div class="container">
+	<div class="row">
+		<div class="span8 offset1">
+			{% if not factura.pagado %}
+			<div class="alert alert-error">
+				 <button type="button" class="close" data-dismiss="alert">×</button>
+				<h4>
+					Aviso Importante!
+				</h4> Esta factura esta pendiente de pago.
+			</div>
+			{% endif %}
+			<div class="row">
+				<div class="span4">
+					<img src="{{STATIC_URL}}img/logo.png" />
+				</div>
+				<div class="span4">
+					
+						<strong>Fecha: </strong> {{factura.fecha}}<br>
+						<strong>Tipo: </strong> {{factura.tipo}}
+					
+				</div>
+				<div class="span4">
+					<p>
+						<strong>Cliente: </strong> {{factura.cliente.user.first_name}} {{factura.cliente.user.last_name}}
+					</p>
+					<p>
+						<strong>Domicilio: </strong> {{factura.cliente.calle}} - {{factura.cliente.localidad}}
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>
+									Producto
+								</th>
+								<th>
+									Cantidad
+								</th>
+								<th>
+									Precio Unitario
+								</th>
+								<th>
+									Total
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for renglon in detalle %}	
+							<tr>
+								<td>
+									{{renglon.pedido_producto.producto}}
+								</td>
+								<td>
+									{{renglon.pedido_producto.cantidad}}
+								</td>
+								<td>
+									{{renglon.pedido_producto.costo}}
+								</td>
+								<td>
+									{{renglon.costo}}
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="3">
+									Total
+								</td>
+								<td>
+									${{factura.total}}
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<a href="" class="btn btn-success btn-mini"> <i class="icon icon-print icon-white" ></i> Imprimir Factura </a>
+</div>
+<form>
+{% endblock %}

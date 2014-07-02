@@ -5,7 +5,7 @@
 	<div class="row">
 		<div class="span8 offset1">
 			<h3 class="text-info text-right">
-				Pedidos Pendientes
+				Gestion de Pedidos
 			</h3>
 			<table class="table table-striped table-hover table-condensed" id="table" name="table">
 				<thead>
@@ -67,9 +67,9 @@
 							{% elif pedido.estado_pedido.descripcion == 'Procesado' %}
 								<a href="{% url 'facturar_pedido' pedido.id %}"><i class="icon-file" title="Cerrar Factura"></i></a>
 							{% elif pedido.estado_pedido.descripcion == 'Facturado' %}
-								<a href=""><i class="icon-envelope" title="Despachar Pedido"></i></a>
+								<a href="{% url 'despachar_pedido' pedido.id %}"><i class="icon-envelope" title="Despachar Pedido"></i></a>
 							{% elif pedido.estado_pedido.descripcion == 'Enviado' %}
-								<a href=""><i class="icon-eye-open"></i></a>
+								<a href="{% url 'registrar_pago' pedido.id %}"><i class="icon-ok" title="Registrar Pago"></i></a>
 							{% elif pedido.estado_pedido.descripcion == 'Rechazado' %}
 								<i class="icon-remove"></i>
 							{% endif %}

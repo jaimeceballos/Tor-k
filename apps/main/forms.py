@@ -100,4 +100,4 @@ class FacturaForm(forms.ModelForm):
 
     class Meta:
         model = Factura
-        exclude = ('cliente','pedido','total')
+        exclude = ('cliente','pedido','total','pagado','fecha_pago')

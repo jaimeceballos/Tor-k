@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block cuerpo %}
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<h3 class="text-right text-info">
+				Mis Facturas
+			</h3>
+			<table class="table table-bordered table-hover table-condensed" name="table" id="table">
+				<thead>
+					<tr>
+						<th>
+							N° Factura
+						</th>
+						<th>
+							N° Pedido
+						</th>
+						<th>
+							Fecha
+						</th>
+						<th>
+							Total
+						</th>
+						<th>
+							Estado
+						</th>
+						<th>
+							
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for factura in facturas %}				
+					<tr>
+						<td>
+							{{factura.id}}
+						</td>
+						<td>
+							{{factura.pedido.id}}
+						</td>
+						<td>
+							{{factura.fecha}}
+						</td>
+						<td>
+							${{factura.total}}
+						</td>
+						<td>
+							{% if factura.pagado %}
+								<span class="label label-success"><i class="icon icon-ok icon-white"></i> Pagado</span>
+							{% else %}
+								<span class="label label-important"><i class="icon icon-remove icon-white"></i> No Pagado </span>
+							{% endif %}
+						</td>
+						<td>
+							<center><a href="{% url 'ver_factura' factura.id %}"><i class="icon icon-eye-open" title="Ver Factura"></i></a></center>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
