@@ -94,5 +94,10 @@ class PedidoForm(forms.ModelForm):
 
 class ProductoPedidoForm(forms.Form):
     cantidad = forms.IntegerField(widget=forms.TextInput(attrs=dict(attrs_dict)))
-    observaciones = forms.CharField(required=False,widget=forms.Textarea())
-    anulado = forms.BooleanField(required=False,widget=forms.CheckboxInput())
+
+class FacturaForm(forms.ModelForm):
+
+
+    class Meta:
+        model = Factura
+        exclude = ('cliente','pedido','total')

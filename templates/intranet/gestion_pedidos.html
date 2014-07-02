@@ -53,19 +53,25 @@
 						<td>
 							{% if pedido.estado_pedido.descripcion == 'Confirmado' %}
 								<span class="label label-important">{{pedido.estado_pedido.descripcion}}</span>
-							{% elif pedido.estado_pedido.descripcion == 'Procesado' %}
+							{% elif pedido.estado_pedido.descripcion == 'Procesado' or pedido.estado_pedido.descripcion == 'Facturado' %}
 								<span class="label label-success">{{pedido.estado_pedido.descripcion}}</span>
 							{% elif pedido.estado_pedido.descripcion == 'Enviado' %}
 								<span class="label label-info">{{pedido.estado_pedido.descripcion}}</span>
+							{% elif pedido.estado_pedido.descripcion == 'Rechazado' %}
+								<span class="label label-default">{{pedido.estado_pedido.descripcion}}</span>
 							{% endif %}
 						</td>
 						<td>
 							{% if pedido.estado_pedido.descripcion == 'Confirmado' %}
 								<a href="{% url 'procesa_pedido' pedido.id %}"><i class="icon-pencil"></i></a>
 							{% elif pedido.estado_pedido.descripcion == 'Procesado' %}
-								<a href=""><i class="icon-envelope"></i></a>
+								<a href="{% url 'facturar_pedido' pedido.id %}"><i class="icon-file" title="Cerrar Factura"></i></a>
+							{% elif pedido.estado_pedido.descripcion == 'Facturado' %}
+								<a href=""><i class="icon-envelope" title="Despachar Pedido"></i></a>
 							{% elif pedido.estado_pedido.descripcion == 'Enviado' %}
 								<a href=""><i class="icon-eye-open"></i></a>
+							{% elif pedido.estado_pedido.descripcion == 'Rechazado' %}
+								<i class="icon-remove"></i>
 							{% endif %}
 						</td>
 					</tr>

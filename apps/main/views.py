@@ -405,8 +405,9 @@ def mis_pedidos(request):
 
 @login_required
 def gestion_pedidos(request):
-	pedidos_pendientes = Pedido.objects.filter(estado_pedido=EstadoPedido.objects.get(descripcion__contains="Confirmado"))
-
+	pedidos_pendientes = Pedido.objects.all()
+	pedidos_pendientes = pedidos_pendientes.exclude(estado_pedido=EstadoPedido.objects.get(descripcion__contains="Enviado"))
+	pedidos_pendientes = pedidos_pendientes.exclude(estado_pedido=EstadoPedido.objects.get(descripcion__contains="Finalizado"))
 	values = {
 		'pedidos':pedidos_pendientes,
 	}
@@ -432,8 +433,70 @@ def anula_item(request,id_prodpedido):
 		producto_pedido.observaciones = request.POST['observaciones']
 		producto_pedido.anulado = True
 		producto_pedido.save()	
-	return HttpResponseRedirect(reverse('procesa_pedido',kwargs={'id_prodpedido': producto_pedido.pedido.id}))
+	return HttpResponseRedirect('../../%d/' % producto_pedido.pedido.id)
 
+@login_required
+def facturar_pedido(request,id_pedido):
+	pedido = Pedido.objects.get(id=id_pedido)
+	prods_pedido = ProductoPedido.objects.filter(pedido=id_pedido)
+	prods_pedido = prods_pedido.filter(anulado=False)
+	factura 	= Factura()
+	if request.method == 'POST':
+		fact = FacturaForm(request.POST)
+		if fact.is_valid():
+			factura = Factura.objects.get(pedido=pedido)
+			factura.tipo = fact.cleaned_data['tipo']
+			factura.save()
+			pedido.estado_pedido = EstadoPedido.objects.get(descripcion__contains='Facturado')
+			pedido.save()
+			return HttpResponseRedirect(reverse('gestion_pedidos'))
+	if pedido.estado_pedido.descripcion == 'Procesado':
+		form = FacturaForm(instance=factura)
+		factura = Factura.objects.get(pedido = pedido)		
+		detalle = DetalleFactura.objects.filter(factura=factura)
+		values = {
+			'form':form,
+			'factura':factura,
+			'detalle':detalle,
+		}
+		return render_to_response('intranet/factura.html',values,context_instance=RequestContext(request))
+			
+	factura.pedido = pedido
+	factura.cliente = UserProfile.objects.get(user=pedido.cliente)
+	factura.save()
+	total = 0
+	for item in prods_pedido:
+		detalle = DetalleFactura()
+		detalle.factura = factura
+		detalle.pedido_producto = item
+		detalle.costo = item.costo * item.cantidad
+		detalle.save()
+		producto = Producto.objects.get(id = item.producto.id)
+		producto.stock_actual -= item.cantidad
+		producto.save()
+		total += detalle.costo
+	factura.total = total
+	factura.save()
+	detalle = DetalleFactura.objects.filter(factura=factura)
+	form = FacturaForm(instance=factura)
+	pedido.estado_pedido = EstadoPedido.objects.get(descripcion__contains='Procesado')
+	pedido.save()
+	values = {
+		'form':form,
+		'factura':factura,
+		'detalle':detalle,
+	}
+	return render_to_response('intranet/factura.html',values,context_instance=RequestContext(request))
+	
+	
+@login_required
+def rechazar_pedido(request,id_pedido):
+	pedido = Pedido.objects.get(id = id_pedido)
+	if request.method=='POST':
+		pedido.observaciones = request.POST['observaciones']
+		pedido.estado_pedido = EstadoPedido.objects.get(descripcion__contains='Rechazado')
+		pedido.save()	
+	return HttpResponseRedirect(reverse('gestion_pedidos'))
 
 def calcular_total_pedido(request):
 	total=0

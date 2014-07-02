@@ -130,24 +130,30 @@ class ProductoPedido(models.Model):
 class TipoFactura(models.Model):
 	descripcion 	= models.CharField(max_length=100)
 
+	def __unicode__(self):
+		return u'%s' % self.descripcion
+	
 	class Meta:
 		db_table	= 'tipo_factura'
 
 
 
 class Factura(models.Model):
-	tipo 	= models.ForeignKey('TipoFactura',on_delete=models.PROTECT)
-	numero	= models.IntegerField()
+	cliente	= models.ForeignKey('UserProfile',on_delete=models.PROTECT)
+	tipo 	= models.ForeignKey('TipoFactura',on_delete=models.PROTECT,null=True,blank=True)
 	pedido 	= models.ForeignKey('Pedido',on_delete=models.PROTECT)
-	fecha 	= models.DateField()
+	fecha 	= models.DateField(auto_now=True)
+	total	= models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True)
+
 
 	class Meta:
 		db_table =	'factura'
+		unique_together = ('cliente','pedido',)
 
 class DetalleFactura(models.Model):
 	factura 		= models.ForeignKey('Factura',on_delete=models.PROTECT)
 	pedido_producto	= models.ForeignKey('ProductoPedido',on_delete=models.PROTECT)
-	costo			= models.DecimalField(max_digits=5,decimal_places=2)
+	costo			= models.DecimalField(max_digits=10,decimal_places=2)
 
 	class Meta:
 		db_table 	= 'detalle_factura'

@@ -65,6 +65,28 @@
 				</div>
 				{% endfor %}
 			</div>
+			<a class="btn btn-success btn-mini" href="{% url 'facturar_pedido' pedido.id %}"><i class="icon-print icon-white"></i>Facturar pedido</a>  <a id="modal-rechazar-{{pedido.id}}" href="#modal-container-rechazar-{{pedido.id}}" role="button" class="btn btn-danger btn-mini" data-toggle="modal"><i class="icon-remove icon-white"></i> Rechazar pedido</a> 
+			<div id="modal-container-rechazar-{{pedido.id}}" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<form method="POST" action="{% url 'rechazar_pedido' pedido.id %}">{% csrf_token %}
+					<div class="modal-header">
+						 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h3 id="myModalLabel">
+							Rechazar Pedido
+						</h3>
+					</div>
+					<div class="modal-body">
+						
+						<p>
+							<label for="observaciones">Describa brevemente el motivo del rechazo</label>
+							<textarea id="observaciones" name="observaciones"></textarea>
+						</p>
+						
+					</div>
+					<div class="modal-footer">
+						 <button class="btn btn-mini" data-dismiss="modal" aria-hidden="true">Cerrar</button> <button class="btn btn-primary btn-mini">Guardar</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>
