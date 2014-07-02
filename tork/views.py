@@ -110,8 +110,8 @@ def edit_profile(request):
 
 def productos_publicar():
 	ofertas = Oferta.objects.all()
-	of1 = ofertas.exclude(fecha_inicio__gte=datetime.now())
-	ofertas = ofertas.exclude(fecha_fin__lte=datetime.now())
+	of1 = ofertas.exclude(fecha_inicio__gt=datetime.now())
+	ofertas = ofertas.exclude(fecha_fin__lt=datetime.now())
 
 	producto = Producto.objects.all()
 	for of in ofertas:
