@@ -97,12 +97,11 @@ def edit_productos(request,id_prod):
 	producto = ProductoForm()
 	productos = Producto.objects.all()
 	categorias = Categoria.objects.all()
-	print 'llega'
 	if request.method == 'POST':
 		producto = ProductoForm(request.POST,request.FILES)
 		if producto.is_valid():
 			prod.categoria 		= producto.cleaned_data['categoria']
-			prod.espec 			= producto.cleaned_data['espec']
+			prod.descripcion 	= producto.cleaned_data['descripcion']
 			prod.stock_minimo 	= producto.cleaned_data['stock_minimo']
 			prod.punto_reorden 	= producto.cleaned_data['punto_reorden']
 			prod.stock_maximo 	= producto.cleaned_data['stock_maximo']
@@ -430,15 +429,6 @@ def anula_item(request,id_prodpedido):
 		producto_pedido.anulado = True
 		producto_pedido.save()	
 	return HttpResponseRedirect('../../%d/' % producto_pedido.pedido.id)
-	
-@login_required
-def modifica_item(request,id_prodpedido):
-	producto_pedido = ProductoPedido.objects.get(id=id_prodpedido)
-	if request.method == 'POST':
-		producto_pedido.observaciones = request.POST['observaciones']
-		producto_pedido.cantidad = request.POST['cantidad']
-		producto_pedido.save()
-	return HttpResponseRedirect('../../%d/' % producto_pedido.pedido.id)	
 
 @login_required
 def facturar_pedido(request,id_pedido):

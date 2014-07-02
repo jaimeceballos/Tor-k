@@ -88,6 +88,26 @@ def registro(request):
 	}
 	return render_to_response('internet/registro.html',values, context_instance = RequestContext(request))
 
+def edit_profile(request):
+	profile = UserProfile.objects.get(user=request.user)
+	formr = UserProfileForm(instance=profile)
+	form = LoginForm()
+	categorias = Categoria.objects.all()
+	if request.method == 'POST':
+		formr = UserProfileForm(request.POST)
+		profile.tipo_doc = TipoDoc.objects.get(id=formr.data['tipo_doc'])
+		profile.nro_doc	= formr.data['nro_doc']
+		profile.localidad = formr.data['localidad']
+		profile.calle 	= formr.data['calle']
+		profile.save()
+		return HttpResponseRedirect('/')
+	values={
+		'profile':formr,
+		'categorias':categorias,
+		'form':form,
+	}
+	return render_to_response('internet/edit_profile.html',values,context_instance=RequestContext(request))
+
 def productos_publicar():
 	ofertas = Oferta.objects.all()
 	of1 = ofertas.exclude(fecha_inicio__gte=datetime.now())

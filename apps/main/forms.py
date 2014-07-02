@@ -68,7 +68,7 @@ class UserProfileForm(forms.ModelForm):
 
 	class Meta:
 		model = UserProfile
-		exclude = ('user',)
+		exclude = ('user','apto','anulado')
 
 class CategoriaForm(forms.ModelForm):
 

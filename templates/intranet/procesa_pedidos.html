@@ -31,6 +31,31 @@
 								<p><strong>Cantidad Disponible: </strong>{{item.producto.stock_actual}}</p>
 								{% if item.cantidad > item.producto.stock_actual %}
 									<p>
+										<a id="modal-cant-{{item.producto.id}}" href="#modal-container-cant-{{item.producto.id}}" role="button" class="btn btn-success btn-mini" data-toggle="modal">Modificar Cantidad</a>
+									<div id="modal-container-cant-{{item.producto.id}}" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<form method="POST" action="{% url 'modifica_item' item.id %}">{% csrf_token %}
+										<div class="modal-header">
+											 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+											<h3 id="myModalLabel">
+												Modificar Cantidad
+											</h3>
+										</div>
+										<div class="modal-body">
+											<p>
+												<label for="cantidad">Cantidad</label>
+												<input type="text" name="cantidad" id="cantidad">
+											</p>
+											<p>
+												<label for="observaciones">Describa brevemente el motivo de la modificacion</label>
+												<textarea id="observaciones" name="observaciones"></textarea>
+											</p>
+											
+										</div>
+										<div class="modal-footer">
+											 <button class="btn btn-mini" data-dismiss="modal" aria-hidden="true">Cerrar</button> <button class="btn btn-primary btn-mini">Guardar</button>
+										</div>
+										</form>
+									</div>
 										<a id="modal-{{item.producto.id}}" href="#modal-container-{{item.producto.id}}" role="button" class="btn btn-danger btn-mini" data-toggle="modal">Anular Producto</a>
 									<div id="modal-container-{{item.producto.id}}" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 									<form method="POST" action="{% url 'anula_item' item.id %}">{% csrf_token %}

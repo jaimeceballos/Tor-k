@@ -8,7 +8,6 @@
 		{% for oferta in ofertas %}	
 			<li class="span3">
 				<div class="thumbnail">
-					
 					<div class="caption">
 						<h4><a href="{% url 'ver_producto' oferta.producto.id %}">{{oferta.producto}}</a></h4>
 						<img src="{{STATIC_URL}}{{oferta.producto.imagen}}" alt="" class="img-rounded">
@@ -20,9 +19,7 @@
 							</p>
 						{% else %}
 							<strong>Producto sin stock</strong>
-						{% endif %}
-						
-						
+						{% endif %}						
 					</div>
 				</div>
 			</li>

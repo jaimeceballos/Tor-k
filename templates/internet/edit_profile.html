@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block cuerpo %}
+	<form method="POST" action="{% url 'edit_profile' %}">
+		
+		<ul class="nav navbar">
+			{% csrf_token %}
+			<h3>Usuario: {{user}}</h3>
+			<h4>Nombre: {{user.first_name}} {{user.last_name}}</h4>
+			{{profile.as_ul}}
+			<li>
+				<input type="submit" class="btn btn-small btn-success" value="Guardar"/>
+			</li>
+		</ul>
+	</form>
+{% endblock %}

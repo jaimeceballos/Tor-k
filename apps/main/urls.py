@@ -30,4 +30,5 @@ urlpatterns = patterns('',
     url(r'^misfacturas/$', mis_facturas, name='mis_facturas'),
     url(r'^misfacturas/ver/(?P<id_factura>\d+)/$', ver_factura, name='ver_factura'),
 	url(r'^ver/(?P<id_cat>\d+)/$', ver_categoria, name='ver_categoria'),
+	url(r'^procesapedido/modificaitem/(?P<id_prodpedido>\d+)/$', modifica_item, name='modifica_item'),
 )
